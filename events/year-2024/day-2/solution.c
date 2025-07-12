@@ -3,22 +3,23 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define FILE_NAME "input.txt"
+#define FILE_NAME "./input.txt"
 #define MAX_LINE_LENGTH 24
 #define MAX_INT_PER_LINE 8
 
-int part_one(char *file_name);
-bool is_unsafe_part_one(int *input, int length);
-int part_two(char *file_name);
+int year2024_day2_part1(char *file_name);
+int year2024_day2_part2(char *file_name);
+bool is_safe(int *input, int length);
+bool is_safe_with_dampener(int *input, int length);
 
 int main(int argc, char **argv) {
-    printf("Part 1: %d\n", part_one(FILE_NAME));
-    printf("Part 2: %d\n", part_two(FILE_NAME));
+    printf("Part 1: %d\n", year2024_day2_part1(FILE_NAME));
+    printf("Part 2: %d\n", year2024_day2_part2(FILE_NAME));
 
     return 0;
 }
 
-int part_one(char *file_name) {
+int year2024_day2_part1(char *file_name) {
     FILE *file = fopen(file_name, "r");
     if (file == NULL) {
         perror("Error in opening the file");
@@ -35,7 +36,7 @@ int part_one(char *file_name) {
             token = strtok(NULL, " ");
         }
 
-        if (is_unsafe_part_one(input, length)) continue;
+        if (!is_safe(input, length)) continue;
         safe_reports++;
     }
 
@@ -43,26 +44,62 @@ int part_one(char *file_name) {
     return safe_reports;
 }
 
-bool is_unsafe_part_one(int *input, int length) {
-    if (length < 2) return true;
+int year2024_day2_part2(char *file_name) {
+    FILE *file = fopen(file_name, "r");
+    if (file == NULL) {
+        perror("Error in opening the file");
+        exit(1);
+    }
+
+    int safe_reports = 0;
+    char line[MAX_LINE_LENGTH + 2];
+    while (fgets(line, sizeof(line), file) != NULL) {
+        int input[MAX_INT_PER_LINE], length = 0;
+        char *token = strtok(line, " ");
+        while (token != NULL) {
+            input[length++] = atoi(token);
+            token = strtok(NULL, " ");
+        }
+
+        if (!is_safe_with_dampener(input, length)) continue;
+        safe_reports++;
+    }
+
+    fclose(file);
+    return safe_reports;
+}
+
+bool is_safe(int *input, int length) {
+    if (length < 2) return false;
 
     bool is_ascending = false, is_descending = false;
     for (int i = 0; i < length - 1; i++) {
-        int diff = input[i] - input[i + 1];
+        int difference = input[i] - input[i + 1];
 
         if (!is_ascending && !is_descending) {
-            if (diff < 0) is_ascending = true;
-            else if (diff > 0) is_descending = true;
-            else return true;
+            if (difference < 0) is_ascending = true;
+            else if (difference > 0) is_descending = true;
+            else return false;
         }
 
-        if (is_ascending && (diff < -3 || diff >= 0)) return true;
-        else if (is_descending && (diff > 3 || diff <= 0)) return true;
+        if (is_ascending && (difference < -3 || difference >= 0)) return false;
+        else if (is_descending && (difference > 3 || difference <= 0)) return false;
+    }
+
+    return true;
+}
+
+bool is_safe_with_dampener(int *input, int length) {
+    if (is_safe(input, length)) return true;
+
+    for (int i = 0; i < length; i++) {
+        int dampened_input[length - 1];
+        for (int j = 0, k = 0; j < length; j++) {
+            if (i != j) dampened_input[k++] = input[j];
+        }
+
+        if (is_safe(dampened_input, length - 1)) return true;
     }
 
     return false;
-}
-
-int part_two(char *file_name) {
-    return -1;
 }
