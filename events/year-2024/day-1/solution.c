@@ -2,59 +2,52 @@
 #include <stdlib.h>
 #include <stddef.h>
 
-#define FILE_NAME "input.txt"
-#define LINES 1000
+#define FILE_NAME "./input.txt"
+#define FILE_LINES 1000
+#define MAX_LINE_LENGTH 13
 
-int compare_list(const void *one, const void *two) {
-    int int_one  = *(int *)one;
-    int int_two = *(int *)two;
+int year2024_day1_part1(char *file_name);
+int year2024_day1_part2(char *file_name);
 
-    if (int_one > int_two) return 1;
-    if (int_one < int_two) return -1;
+void parse_file(char *file_name, int *left_list, int *right_list);
+void sort_list(int *list, int length);
+
+int main(int argc, char **argv) {
+    printf("Part 1: %d\n", year2024_day1_part1(FILE_NAME));
+    printf("Part 2: %d\n", year2024_day1_part2(FILE_NAME));
+
     return 0;
 }
 
-int part_one() {
-    FILE *file = fopen(FILE_NAME, "r");
-    const int lines = LINES;
+int year2024_day1_part1(char *file_name) {
+    int *left_list = malloc(sizeof(int) * FILE_LINES);
+    int *right_list = malloc(sizeof(int) * FILE_LINES);
+    parse_file(file_name, left_list, right_list);
 
-    int left_list[lines];
-    int right_list[lines];
-    for (size_t i = 0; i < lines; i++) {
-        fscanf(file, "%d%d", &left_list[i], &right_list[i]);
-    }
-
-    fclose(file);
-
-    qsort(left_list, lines, sizeof(left_list[0]), compare_list);
-    qsort(right_list, lines, sizeof(right_list[0]), compare_list);
+    sort_list(left_list, FILE_LINES);
+    sort_list(right_list, FILE_LINES);
 
     int answer = 0;
-    for (size_t i = 0; i < lines; i++) {
+    for (int i = 0; i < FILE_LINES; i++) {
         answer += abs(left_list[i] - right_list[i]);
     }
 
+    free(left_list);
+    free(right_list);
     return answer;
 }
 
-int part_two() {
-    FILE *file = fopen(FILE_NAME, "r");
-    const int lines = LINES;
-
-    int left_list[lines];
-    int right_list[lines];
-    for (size_t i = 0; i < lines; i++) {
-        fscanf(file, "%d%d", &left_list[i], &right_list[i]);
-    }
-
-    fclose(file);
+int year2024_day1_part2(char *file_name) {
+    int *left_list = malloc(sizeof(int) * FILE_LINES);
+    int *right_list = malloc(sizeof(int) * FILE_LINES);
+    parse_file(file_name, left_list, right_list);
 
     int answer = 0;
-    for (size_t i = 0; i < lines; i++) {
+    for (int i = 0; i < FILE_LINES; i++) {
         int left_number = left_list[i];
         
         int similarity_score = 0;
-        for (size_t j = 0; j < lines; j++) {
+        for (int j = 0; j < FILE_LINES; j++) {
             int right_number = right_list[j];
             if (left_number == right_number) similarity_score++;
         }
@@ -62,12 +55,38 @@ int part_two() {
         answer += left_list[i] * similarity_score;
     }
 
+    free(left_list);
+    free(right_list);
     return answer;
 }
 
-int main(void) {
-    printf("Part 1: %d\n", part_one());
-    printf("Part 2: %d\n", part_two());
+void parse_file(char *file_name, int *left_list, int *right_list) {
+    if (left_list == NULL || right_list == NULL) {
+        perror("An error occured when executing malloc");
+        exit(1);
+    }
 
-    return 0;
+    FILE *file = fopen(file_name, "r");
+    if (file == NULL) {
+        perror("An error occured when opening the file");
+        exit(1);
+    }
+
+    for (int i = 0; i < FILE_LINES; i++) {
+        fscanf(file, "%d   %d", &left_list[i], &right_list[i]);
+    }
+
+    fclose(file);
+}
+
+void sort_list(int *list, int length) {
+    for (int i = 0; i < length; i++) {
+        for (int j = 0; j < length - 1; j++) {
+            if (!(list[j] > list[j + 1])) continue;
+
+            int temp_value = list[j];
+            list[j] = list[j + 1];
+            list[j + 1] = temp_value;
+        }
+    }
 }

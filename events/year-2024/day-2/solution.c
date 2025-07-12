@@ -4,11 +4,13 @@
 #include <stdbool.h>
 
 #define FILE_NAME "./input.txt"
+#define FILE_LINES 1000
 #define MAX_LINE_LENGTH 24
 #define MAX_INT_PER_LINE 8
 
 int year2024_day2_part1(char *file_name);
 int year2024_day2_part2(char *file_name);
+
 bool is_safe(int *input, int length);
 bool is_safe_with_dampener(int *input, int length);
 
@@ -22,7 +24,7 @@ int main(int argc, char **argv) {
 int year2024_day2_part1(char *file_name) {
     FILE *file = fopen(file_name, "r");
     if (file == NULL) {
-        perror("Error in opening the file");
+        perror("An error occured when opening the file");
         exit(1);
     }
 
@@ -47,7 +49,7 @@ int year2024_day2_part1(char *file_name) {
 int year2024_day2_part2(char *file_name) {
     FILE *file = fopen(file_name, "r");
     if (file == NULL) {
-        perror("Error in opening the file");
+        perror("An error occured when opening the file");
         exit(1);
     }
 
