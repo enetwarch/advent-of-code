@@ -14,7 +14,7 @@ int year2024_day2_part2(char *file_name);
 bool is_safe(int *input, int length);
 bool is_safe_with_dampener(int *input, int length);
 
-int main(int argc, char **argv) {
+int main(void) {
     printf("Part 1: %d\n", year2024_day2_part1(FILE_NAME));
     printf("Part 2: %d\n", year2024_day2_part2(FILE_NAME));
 

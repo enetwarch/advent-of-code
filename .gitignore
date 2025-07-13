@@ -1,0 +1,6 @@
+# Ignores C binaries
+*
+
+# Keep files with extensions and the Makefile
+!*.*
+!Makefile

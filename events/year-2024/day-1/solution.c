@@ -12,7 +12,7 @@ int year2024_day1_part2(char *file_name);
 void parse_file(char *file_name, int *left_list, int *right_list);
 void sort_list(int *list, int length);
 
-int main(int argc, char **argv) {
+int main(void) {
     printf("Part 1: %d\n", year2024_day1_part1(FILE_NAME));
     printf("Part 2: %d\n", year2024_day1_part2(FILE_NAME));
 
