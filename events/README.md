@@ -8,8 +8,6 @@ advent-of-code/ # repository
 |  |  |  |--input.txt # problem input file
 |  |  |  |--solution.c # solution source code
 |  |  |  |--README.md # problem instructions
-|  |  |--main.c # connects solution modules for that year
-|  |  |--modules.h # header file for module declarations
 |  |--README.md # this documentation file
 ```
 
@@ -19,4 +17,6 @@ The [`events/`](./) directory is the most important directory that contains the 
 
 Three essential files will always be inside the `day-*/` subdirectory, which are: [`input.txt`](./year-2024/day-1/input.txt) as the input file, [`solution.c`](./year-2024/day-1/solution.c) as the solution, and [`README.md`](./year-2024/day-1/README.md) for the problem instructions. Other files may appear, but these essential files will always be there at the minimum. Solution files will always follow their respective language's naming convention and capitalization. However, `solution.c` will always be the main entry point of the program. 
 
-In the [`year-*/`](./year-2024/) directory, [`main.c`](./year-2024/main.c) along with [`modules.h`](./year-2024/modules.h) exist to connect all the `solution.c` modules for that year. the `solution.c` files will make use of the defined header in `modules.h` to ensure proper implementation of expected modules. This will typically be done after solving all the days in that year.
+## Executables
+
+In the `Makefile`, there is a command that allows you to compile every source code and run all of the executables. Every `solution.c` file has a `main()` function that prints out the results and a predefined `FILE_NAME` constant based from the root of the repository. By simply running `make run`, you can see all the answers in this directory.
