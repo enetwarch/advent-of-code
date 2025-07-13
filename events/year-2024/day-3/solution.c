@@ -1,12 +1,18 @@
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define FILE_NAME "./input.txt"
+#define MAX_INSTRUCTION_LENGTH 12
 
 int year2024_day3_part1(char *file_name);
 int year2024_day3_part2(char *file_name);
+
+int multiply(char *instruction, int result);
+bool enable(char *instruction, bool enabled);
+void validate_file(FILE *file);
 
 int main(void) {
     printf("Part 1: %d\n", year2024_day3_part1(FILE_NAME));
@@ -17,46 +23,72 @@ int main(void) {
 
 int year2024_day3_part1(char *file_name) {
     FILE *file = fopen(file_name, "r");
-    if (file == NULL) {
-        perror("Error opening file");
-        exit(1);
+    validate_file(file);
+
+    int buffer = 0, result = 0;
+    char instruction[MAX_INSTRUCTION_LENGTH + 1];
+    while ((buffer = fgetc(file)) != EOF) {
+        if (buffer != 'm') continue;
+
+        fseek(file, -1, SEEK_CUR);
+        long location = ftell(file);
+
+        fgets(instruction, sizeof(instruction), file);
+        fseek(file, location + 1, SEEK_SET);
+
+        result = multiply(instruction, result);
     }
 
-    fseek(file, 0, SEEK_END);
-    long file_characters = ftell(file);
-    fseek(file, 0, SEEK_SET);
-
-    char *buffer = malloc((sizeof(char) * file_characters) + 1);
-    if (buffer == NULL) {
-        perror("An error occured when executing malloc");
-        exit(1);
-    }
-
-    fread(buffer, sizeof(char), file_characters, file);
-    buffer[file_characters] = '\0';
-
-    char closing, *p_buffer = buffer;
-    int x = 0, y = 0, result = 0;
-    while ((p_buffer = strstr(p_buffer, "mul(")) != NULL) {
-        if (sscanf(p_buffer, "mul(%3d,%3d%1c", &x, &y, &closing) == 3) {
-            if (closing == ')') result += (x * y);
-        }
-
-        p_buffer++;
-    }
-
-    free(buffer);
     fclose(file);
     return result;
 }
 
 int year2024_day3_part2(char *file_name) {
     FILE *file = fopen(file_name, "r");
-    if (file == NULL) {
-        perror("An error occured when opening the file");
-        exit(1);
+    validate_file(file);
+
+    bool enabled = true;
+    int buffer = 0, result = 0;
+    char instruction[MAX_INSTRUCTION_LENGTH + 1];
+    while ((buffer = fgetc(file)) != EOF) {
+        if (buffer != 'm' && buffer != 'd') continue;
+        if (buffer == 'm' && !enabled) continue;
+
+        fseek(file, -1, SEEK_CUR);
+        long location = ftell(file);
+
+        fgets(instruction, sizeof(instruction), file);
+        fseek(file, location + 1, SEEK_SET);
+
+        if (buffer == 'm')
+            result = multiply(instruction, result);
+        else if (buffer == 'd')
+            enabled = enable(instruction, enabled);
     }
 
     fclose(file);
-    return -1;
+    return result;
+}
+
+int multiply(char *instruction, int result) {
+    char closing;
+    int x = 0, y = 0;
+    if (sscanf(instruction, "mul(%3d,%3d%1c", &x, &y, &closing) == 3) {
+        if (closing == ')') return result + (x * y);
+    }
+
+    return result;
+}
+
+bool enable(char *instruction, bool enabled) {
+    if (strncmp(instruction, "do()", 4) == 0) return true;
+    if (strncmp(instruction, "don't()", 7) == 0) return false;
+    return enabled;
+}
+
+void validate_file(FILE *file) {
+    if (file != NULL) return;
+
+    perror("An error occured when opening the file");
+    exit(1);
 }
