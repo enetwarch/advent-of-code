@@ -19,8 +19,8 @@ bool is_safe_with_dampener(int *input, int length);
 void validate_file(FILE *file);
 
 int main(void) {
-    printf("Part 1: %d\n", year2024_day2_part1(FILE_NAME));
-    printf("Part 2: %d\n", year2024_day2_part2(FILE_NAME));
+    printf("Year 2024 Day 2 Part 1: %d\n", year2024_day2_part1(FILE_NAME));
+    printf("Year 2024 Day 2 Part 2: %d\n", year2024_day2_part2(FILE_NAME));
 
     return 0;
 }
@@ -32,6 +32,9 @@ int year2024_day2_part1(char *file_name) {
     int safe_reports = 0;
     char line[MAX_LINE_LENGTH + 2];
     while (fgets(line, sizeof(line), file) != NULL) {
+        // Read through each line and parses each 2-digit token to int.
+        // Solving directly is more efficient than mallocing to memory.
+
         int input[MAX_INT_PER_LINE], length = 0;
         char *token = strtok(line, " ");
         while (token != NULL) {
@@ -88,6 +91,8 @@ bool is_safe(int *input, int length) {
     return true;
 }
 
+// This is just a wrapper for the is_safe function.
+// It tries to check all cases where 1 level is removed.
 bool is_safe_with_dampener(int *input, int length) {
     if (length < 2) return false;
     if (is_safe(input, length)) return true;

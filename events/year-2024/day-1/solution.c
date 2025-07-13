@@ -17,8 +17,8 @@ void parse_file(char *file_name, int *left_list, int *right_list);
 void sort_list(int *list, int length);
 
 int main(void) {
-    printf("Part 1: %d\n", year2024_day1_part1(FILE_NAME));
-    printf("Part 2: %d\n", year2024_day1_part2(FILE_NAME));
+    printf("Year 2024 Day 1 Part 1: %d\n", year2024_day1_part1(FILE_NAME));
+    printf("Year 2024 Day 1 Part 2: %d\n", year2024_day1_part2(FILE_NAME));
 
     return 0;
 }

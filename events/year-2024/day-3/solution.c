@@ -20,8 +20,8 @@ bool enable(char *instruction, bool enabled);
 void validate_file(FILE *file);
 
 int main(void) {
-    printf("Part 1: %d\n", year2024_day3_part1(FILE_NAME));
-    printf("Part 2: %d\n", year2024_day3_part2(FILE_NAME));
+    printf("Year 2024 Day 3 Part 1: %d\n", year2024_day3_part1(FILE_NAME));
+    printf("Year 2024 Day 3 Part 2: %d\n", year2024_day3_part2(FILE_NAME));
 
     return 0;
 }
@@ -34,6 +34,9 @@ int year2024_day3_part1(char *file_name) {
     char instruction[MAX_INSTRUCTION_LENGTH + 1];
     while ((buffer = fgetc(file)) != EOF) {
         if (buffer != 'm') continue;
+
+        // The file just reads ahead a bit and goes back.
+        // This is what these 4 complex looking lines do.
 
         fseek(file, -1, SEEK_CUR);
         long location = ftell(file);
@@ -80,6 +83,9 @@ int multiply(char *instruction, int result) {
 
     size_t instruction_length = strlen(instruction + 4);
     char buffer[instruction_length + 1];
+
+    // sscanf() will lead to shorter code, but this makes it more manual.
+    // NOLINTNEXTLINE: Unsafe functions are fine for AOC problems.
     memcpy(buffer, instruction + 4, instruction_length + 1);
 
     char *token = strtok(buffer, ",)");
