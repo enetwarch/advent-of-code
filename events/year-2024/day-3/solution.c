@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -7,10 +8,14 @@
 #define FILE_NAME "./input.txt"
 #define MAX_INSTRUCTION_LENGTH 12
 
+#define PART1_ANSWER 175015740
+#define PART2_ANSWER 112272912
+
 int year2024_day3_part1(char *file_name);
 int year2024_day3_part2(char *file_name);
 
 int multiply(char *instruction, int result);
+bool is_numeric(char *token);
 bool enable(char *instruction, bool enabled);
 void validate_file(FILE *file);
 
@@ -71,13 +76,29 @@ int year2024_day3_part2(char *file_name) {
 }
 
 int multiply(char *instruction, int result) {
-    char closing;
-    int x = 0, y = 0;
-    if (sscanf(instruction, "mul(%3d,%3d%1c", &x, &y, &closing) == 3) {
-        if (closing == ')') return result + (x * y);
+    if (strncmp(instruction, "mul(", 4) != 0) return result;
+
+    size_t instruction_length = strlen(instruction + 4);
+    char buffer[instruction_length + 1];
+    memcpy(buffer, instruction + 4, instruction_length + 1);
+
+    char *token = strtok(buffer, ",)");
+    int x = is_numeric(token) ? atoi(token) : 0;
+
+    token = strtok(NULL, ",)");
+    int y = is_numeric(token) ? atoi(token) : 0;
+
+    return result + (x * y);
+}
+
+bool is_numeric(char *token) {
+    if (token == NULL || *token == '\0') return false;
+    while (*token != '\0') {
+        if (!isdigit(*token)) return false;
+        token++;
     }
 
-    return result;
+    return true;
 }
 
 bool enable(char *instruction, bool enabled) {

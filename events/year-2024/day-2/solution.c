@@ -8,11 +8,15 @@
 #define MAX_LINE_LENGTH 24
 #define MAX_INT_PER_LINE 8
 
+#define PART1_ANSWER 252
+#define PART2_ANSWER 324
+
 int year2024_day2_part1(char *file_name);
 int year2024_day2_part2(char *file_name);
 
 bool is_safe(int *input, int length);
 bool is_safe_with_dampener(int *input, int length);
+void validate_file(FILE *file);
 
 int main(void) {
     printf("Part 1: %d\n", year2024_day2_part1(FILE_NAME));
@@ -23,10 +27,7 @@ int main(void) {
 
 int year2024_day2_part1(char *file_name) {
     FILE *file = fopen(file_name, "r");
-    if (file == NULL) {
-        perror("An error occured when opening the file");
-        exit(1);
-    }
+    validate_file(file);
 
     int safe_reports = 0;
     char line[MAX_LINE_LENGTH + 2];
@@ -47,10 +48,7 @@ int year2024_day2_part1(char *file_name) {
 
 int year2024_day2_part2(char *file_name) {
     FILE *file = fopen(file_name, "r");
-    if (file == NULL) {
-        perror("An error occured when opening the file");
-        exit(1);
-    }
+    validate_file(file);
 
     int safe_reports = 0;
     char line[MAX_LINE_LENGTH + 2];
@@ -104,4 +102,11 @@ bool is_safe_with_dampener(int *input, int length) {
     }
 
     return false;
+}
+
+void validate_file(FILE *file) {
+    if (file != NULL) return;
+
+    perror("An error occured when opening the file");
+    exit(1);
 }

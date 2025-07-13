@@ -7,6 +7,9 @@
 #define FILE_LINES 1000
 #define MAX_LINE_LENGTH 13
 
+#define PART1_ANSWER 1222801
+#define PART2_ANSWER 22545250
+
 int year2024_day1_part1(char *file_name);
 int year2024_day1_part2(char *file_name);
 
@@ -63,7 +66,7 @@ int year2024_day1_part2(char *file_name) {
 
 void parse_file(char *file_name, int *left_list, int *right_list) {
     if (left_list == NULL || right_list == NULL) {
-        perror("An error occured when executing malloc");
+        perror("An error occured when executing calloc");
         exit(1);
     }
 
@@ -92,9 +95,9 @@ void sort_list(int *list, int length) {
         for (int j = 0; j < length - 1; j++) {
             if (list[j] <= list[j + 1]) continue;
 
-            int temp_value = list[j];
+            int temporary_value = list[j];
             list[j] = list[j + 1];
-            list[j + 1] = temp_value;
+            list[j + 1] = temporary_value;
         }
     }
 }
