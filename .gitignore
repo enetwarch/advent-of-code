@@ -1,9 +1,7 @@
-# Ignores C binaries
-*
-
-# Keep files with extensions and the Makefile
-!*.*
-!Makefile
+# Ignores C binaries and object files
+solution
+main
+*.o
 
 # IDE configs
 .vscode/
