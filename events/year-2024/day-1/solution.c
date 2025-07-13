@@ -1,6 +1,6 @@
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
 
 #define FILE_NAME "./input.txt"
 #define FILE_LINES 1000
@@ -45,7 +45,7 @@ int year2024_day1_part2(char *file_name) {
     int answer = 0;
     for (int i = 0; i < FILE_LINES; i++) {
         int left_number = left_list[i];
-        
+
         int similarity_score = 0;
         for (int j = 0; j < FILE_LINES; j++) {
             int right_number = right_list[j];

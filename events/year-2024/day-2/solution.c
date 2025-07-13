@@ -1,7 +1,7 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 
 #define FILE_NAME "./input.txt"
 #define FILE_LINES 1000
@@ -38,8 +38,7 @@ int year2024_day2_part1(char *file_name) {
             token = strtok(NULL, " ");
         }
 
-        if (!is_safe(input, length)) continue;
-        safe_reports++;
+        if (is_safe(input, length)) safe_reports++;
     }
 
     fclose(file);
@@ -63,8 +62,7 @@ int year2024_day2_part2(char *file_name) {
             token = strtok(NULL, " ");
         }
 
-        if (!is_safe_with_dampener(input, length)) continue;
-        safe_reports++;
+        if (is_safe_with_dampener(input, length)) safe_reports++;
     }
 
     fclose(file);
@@ -79,13 +77,14 @@ bool is_safe(int *input, int length) {
         int difference = input[i] - input[i + 1];
 
         if (!is_ascending && !is_descending) {
-            if (difference < 0) is_ascending = true;
-            else if (difference > 0) is_descending = true;
-            else return false;
+            is_ascending = difference < 0;
+            is_descending = difference > 0;
+
+            if (!is_ascending && !is_descending) return false;
         }
 
         if (is_ascending && (difference < -3 || difference >= 0)) return false;
-        else if (is_descending && (difference > 3 || difference <= 0)) return false;
+        if (is_descending && (difference > 3 || difference <= 0)) return false;
     }
 
     return true;
