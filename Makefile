@@ -9,30 +9,34 @@ FORMATTER_CONFIG = {BasedOnStyle: Google, IndentWidth: 4}
 FORMATTER_FLAGS = -i -style='$(FORMATTER_CONFIG)'
 
 LINTER = clang-tidy
-LINTER_FLAGS = -checks=bugprone-*
+LINTER_FLAGS = -checks=bugprone-* -quiet -extra-arg=-fno-caret-diagnostics
 LINTER_COMPILER_FLAGS = -Iinclude -Wall
 
 SOURCE := $(shell find . -name "*.c")
 HEADER := $(shell find . -name "*.h")
 
+# Attempts to convert all *.c files to * (binary)
 TARGET := $(SOURCE:.c=)
 
+# Makes these commands runnable even if a file with the same name exists.
+.PHONY: all clean check format lint
+
 all: $(TARGET)
-	@echo All C files compiled!
+	@echo All files compiled!
 
 # Predefined rule for the make all dependency.
 %: %.c
-	$(COMPILER) $(COMPILER_FLAGS) -o $@ $<
+	@$(COMPILER) $(COMPILER_FLAGS) -o $@ $<
 
 clean:
-	rm -rf $(TARGET)
+	@rm -rf $(TARGET)
 	@echo All executables removed!
 
 check: format lint
 	@echo All files checked!
 
-format: 
-	$(FORMATTER) $(FORMATTER_FLAGS) $(SOURCE) $(HEADER)
+format:
+	@$(FORMATTER) $(FORMATTER_FLAGS) $(SOURCE) $(HEADER)
 	@echo All files formatted!
 
 lint:

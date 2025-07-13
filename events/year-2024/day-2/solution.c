@@ -91,6 +91,7 @@ bool is_safe(int *input, int length) {
 }
 
 bool is_safe_with_dampener(int *input, int length) {
+    if (length < 2) return false;
     if (is_safe(input, length)) return true;
 
     for (int i = 0; i < length; i++) {

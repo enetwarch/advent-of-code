@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define FILE_NAME "./input.txt"
 #define FILE_LINES 1000
@@ -20,8 +21,8 @@ int main(void) {
 }
 
 int year2024_day1_part1(char *file_name) {
-    int *left_list = malloc(sizeof(int) * FILE_LINES);
-    int *right_list = malloc(sizeof(int) * FILE_LINES);
+    int *left_list = calloc(FILE_LINES, sizeof(int));
+    int *right_list = calloc(FILE_LINES, sizeof(int));
     parse_file(file_name, left_list, right_list);
 
     sort_list(left_list, FILE_LINES);
@@ -38,8 +39,8 @@ int year2024_day1_part1(char *file_name) {
 }
 
 int year2024_day1_part2(char *file_name) {
-    int *left_list = malloc(sizeof(int) * FILE_LINES);
-    int *right_list = malloc(sizeof(int) * FILE_LINES);
+    int *left_list = calloc(FILE_LINES, sizeof(int));
+    int *right_list = calloc(FILE_LINES, sizeof(int));
     parse_file(file_name, left_list, right_list);
 
     int answer = 0;
@@ -72,8 +73,15 @@ void parse_file(char *file_name, int *left_list, int *right_list) {
         exit(1);
     }
 
+    char line[MAX_LINE_LENGTH + 2];
     for (int i = 0; i < FILE_LINES; i++) {
-        fscanf(file, "%d   %d", &left_list[i], &right_list[i]);
+        if (fgets(line, sizeof(line), file) == NULL) break;
+
+        char *token = strtok(line, "   ");
+        left_list[i] = atoi(token);
+
+        token = strtok(NULL, "   ");
+        right_list[i] = atoi(token);
     }
 
     fclose(file);
@@ -82,7 +90,7 @@ void parse_file(char *file_name, int *left_list, int *right_list) {
 void sort_list(int *list, int length) {
     for (int i = 0; i < length; i++) {
         for (int j = 0; j < length - 1; j++) {
-            if (!(list[j] > list[j + 1])) continue;
+            if (list[j] <= list[j + 1]) continue;
 
             int temp_value = list[j];
             list[j] = list[j + 1];

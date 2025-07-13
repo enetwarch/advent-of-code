@@ -4,3 +4,6 @@
 # Keep files with extensions and the Makefile
 !*.*
 !Makefile
+
+# IDE configs
+.vscode/
