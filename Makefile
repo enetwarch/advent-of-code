@@ -12,8 +12,8 @@ LINTER = clang-tidy
 LINTER_FLAGS = -checks=bugprone-* -quiet -extra-arg=-fno-caret-diagnostics
 LINTER_COMPILER_FLAGS = -Iinclude -Wall
 
-SOURCE := $(shell find . -name "*.c")
-HEADER := $(shell find . -name "*.h")
+SOURCE := $(shell find . -name "*.c" | sort)
+HEADER := $(shell find . -name "*.h" | sort)
 
 # Attempts to convert all *.c files to * (binary)
 TARGET := $(SOURCE:.c=)
@@ -27,6 +27,11 @@ all: $(TARGET)
 # Predefined rule for the make all dependency.
 %: %.c
 	@$(COMPILER) $(COMPILER_FLAGS) -o $@ $<
+
+run: all
+	@for binary in $(TARGET); do \
+		$$binary; \
+	done
 
 clean:
 	@rm -rf $(TARGET)
