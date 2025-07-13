@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define FILE_NAME "./input.txt"
+#define FILE_NAME "./events/year-2024/day-3/input.txt"
 #define MAX_INSTRUCTION_LENGTH 12
 
 #define PART1_ANSWER 175015740

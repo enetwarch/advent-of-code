@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define FILE_NAME "./input.txt"
+#define FILE_NAME "./events/year-2024/day-2/input.txt"
 #define FILE_LINES 1000
 #define MAX_LINE_LENGTH 24
 #define MAX_INT_PER_LINE 8
