@@ -16,25 +16,21 @@ EVENT_DIRECTORY = events
 SOURCE_DIRECTORY = solutions
 TARGET_DIRECTORY = target
 
-SOURCE := $(shell find $(EVENT_DIRECTORY) -path "*/$(SOURCE_DIRECTORY)/*.c" | sort)
-HEADER := $(shell find $(EVENT_DIRECTORY) -name "*.h" | sort)
-TARGET := $(shell echo $(SOURCE) | sed 's|/$(SOURCE_DIRECTORY)/|/$(TARGET_DIRECTORY)/|g; s|\.c||g')
+SOURCE := $(shell find . -name "*.c" | sort)
+TARGET := $(SOURCE:.c=)
 
 # Makes these commands runnable even if a file with the same name exists.
 .PHONY: all clean check format lint
 
-all: $(TARGET)
-	@echo All files compiled!
+run: $(TARGET)
+	@for binary in $(TARGET); do \
+		$$binary; \
+		rm $$binary; \
+	done
 
 # Predefined rule for the make all dependency.
-$(TARGET): $(SOURCE)
-	@mkdir -p $(dir $@)
+%: %.c
 	@$(COMPILER) $(COMPILER_FLAGS) -o $@ $<
-
-run: all
-	@for binary in $(TARGET); do \
-		./$$binary; \
-	done
 
 clean:
 	@find $(EVENT_DIRECTORY) -type d -name "$(TARGET_DIRECTORY)" -exec rm -rf {} +
@@ -56,7 +52,5 @@ lint:
 debug:
 	@echo "SOURCE FILES:"
 	@printf "\t%s\n" $(SOURCE)
-	@echo "HEADER FILES:"
-	@printf "\t%s\n" $(HEADER)
 	@echo "TARGET FILES:"
 	@printf "\t%s\n" $(TARGET)
