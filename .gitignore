@@ -1,6 +1,5 @@
-# Ignores C binaries and object files
-solution
-main
+# Ignores binaries and object files
+target/
 *.o
 
 # IDE configs
