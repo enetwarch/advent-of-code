@@ -37,16 +37,16 @@ int y2024_d02_p1(char *file_name, int max_line_length, int max_int_per_line) {
         // Read through each line and parses each 2-digit token to int.
         // Solving directly is more efficient than mallocing to memory.
 
-        int max_line_length = 0;
+        int input_index = 0;
         int input[max_int_per_line];
 
         char *token = strtok(line_buffer, " ");
         while (token != NULL) {
-            input[max_line_length++] = atoi(token);
+            input[input_index++] = atoi(token);
             token = strtok(NULL, " ");
         }
 
-        if (is_safe(input, max_line_length)) safe_reports++;
+        if (is_safe(input, input_index)) safe_reports++;
     }
 
     fclose(file);
@@ -61,16 +61,16 @@ int y2024_d02_p2(char *file_name, int max_line_length, int max_int_per_line) {
     int safe_reports = 0;
     char line_buffer[max_line_length + 2];
     while (fgets(line_buffer, (int)sizeof(line_buffer), file) != NULL) {
-        int max_line_length = 0;
+        int input_index = 0;
         int input[max_int_per_line];
 
         char *token = strtok(line_buffer, " ");
         while (token != NULL) {
-            input[max_line_length++] = atoi(token);
+            input[input_index++] = atoi(token);
             token = strtok(NULL, " ");
         }
 
-        if (is_safe_with_dampener(input, max_line_length)) safe_reports++;
+        if (is_safe_with_dampener(input, input_index)) safe_reports++;
     }
 
     fclose(file);
