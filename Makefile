@@ -12,11 +12,13 @@ LINTER = clang-tidy
 LINTER_FLAGS = -checks=bugprone-* -quiet -extra-arg=-fno-caret-diagnostics
 LINTER_COMPILER_FLAGS = -Iinclude -Wall
 
-SOURCE := $(shell find . -name "*.c" | sort)
-HEADER := $(shell find . -name "*.h" | sort)
+EVENT_DIRECTORY = events
+SOURCE_DIRECTORY = solutions
+TARGET_DIRECTORY = target
 
-# Attempts to convert all *.c files to * (binary)
-TARGET := $(SOURCE:.c=)
+SOURCE := $(shell find $(EVENT_DIRECTORY) -path "*/$(SOURCE_DIRECTORY)/*.c" | sort)
+HEADER := $(shell find $(EVENT_DIRECTORY) -name "*.h" | sort)
+TARGET := $(shell echo $(SOURCE) | sed 's|/$(SOURCE_DIRECTORY)/|/$(TARGET_DIRECTORY)/|g; s|\.c||g')
 
 # Makes these commands runnable even if a file with the same name exists.
 .PHONY: all clean check format lint
@@ -25,16 +27,17 @@ all: $(TARGET)
 	@echo All files compiled!
 
 # Predefined rule for the make all dependency.
-%: %.c
+$(TARGET): $(SOURCE)
+	@mkdir -p $(dir $@)
 	@$(COMPILER) $(COMPILER_FLAGS) -o $@ $<
 
 run: all
 	@for binary in $(TARGET); do \
-		$$binary; \
+		./$$binary; \
 	done
 
 clean:
-	@rm -rf $(TARGET)
+	@find $(EVENT_DIRECTORY) -type d -name "$(TARGET_DIRECTORY)" -exec rm -rf {} +
 	@echo All executables removed!
 
 check: format lint
@@ -49,3 +52,11 @@ lint:
 		$(LINTER) $(LINTER_FLAGS) $$file -- $(LINTER_COMPILER_FLAGS); \
 	done
 	@echo All files linted!
+
+debug:
+	@echo "SOURCE FILES:"
+	@printf "\t%s\n" $(SOURCE)
+	@echo "HEADER FILES:"
+	@printf "\t%s\n" $(HEADER)
+	@echo "TARGET FILES:"
+	@printf "\t%s\n" $(TARGET)
