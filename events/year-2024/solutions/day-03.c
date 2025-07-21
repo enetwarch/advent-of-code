@@ -5,14 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define FILE_NAME "./events/year-2024/day-3/input.txt"
-#define MAX_INSTRUCTION_LENGTH 12
+#include "../metadata.h"
 
-#define PART1_ANSWER 175015740
-#define PART2_ANSWER 112272912
-
-int year2024_day3_part1(char *file_name);
-int year2024_day3_part2(char *file_name);
+int y2024_d03_p1(char *file_name, int max_instruction_length);
+int y2024_d03_p2(char *file_name, int max_instruction_length);
 
 int multiply(char *instruction, int result);
 bool is_numeric(char *token);
@@ -20,18 +16,25 @@ bool enable(char *instruction, bool enabled);
 void validate_file(FILE *file);
 
 int main(void) {
-    printf("Year 2024 Day 3 Part 1: %d\n", year2024_day3_part1(FILE_NAME));
-    printf("Year 2024 Day 3 Part 2: %d\n", year2024_day3_part2(FILE_NAME));
+    char *file_name = Y2024_D03_INPUT_FILE_NAME;
+    int max_instruction_length = Y2024_D03_MAX_INSTRUCTION_LENGTH;
 
-    return 0;
+    int p1_answer = y2024_d03_p1(file_name, max_instruction_length);
+    int p2_answer = y2024_d03_p2(file_name, max_instruction_length);
+
+    PRINT_ANSWER_INT(Y2024_D03_P1_LABEL, p1_answer);
+    PRINT_ANSWER_INT(Y2024_D03_P2_LABEL, p2_answer);
+
+    return EXIT_SUCCESS;
 }
 
-int year2024_day3_part1(char *file_name) {
+int y2024_d03_p1(char *file_name, int max_instruction_length) {
     FILE *file = fopen(file_name, "r");
     validate_file(file);
 
-    int buffer = 0, result = 0;
-    char instruction[MAX_INSTRUCTION_LENGTH + 1];
+    int result = 0;
+    int buffer = 0;
+    char instruction[max_instruction_length + 1];
     while ((buffer = fgetc(file)) != EOF) {
         if (buffer != 'm') continue;
 
@@ -41,7 +44,7 @@ int year2024_day3_part1(char *file_name) {
         fseek(file, -1, SEEK_CUR);
         long location = ftell(file);
 
-        fgets(instruction, sizeof(instruction), file);
+        fgets(instruction, (int)sizeof(instruction), file);
         fseek(file, location + 1, SEEK_SET);
 
         result = multiply(instruction, result);
@@ -51,13 +54,14 @@ int year2024_day3_part1(char *file_name) {
     return result;
 }
 
-int year2024_day3_part2(char *file_name) {
+int y2024_d03_p2(char *file_name, int max_instruction_length) {
     FILE *file = fopen(file_name, "r");
     validate_file(file);
 
+    int result = 0;
+    int buffer = 0;
     bool enabled = true;
-    int buffer = 0, result = 0;
-    char instruction[MAX_INSTRUCTION_LENGTH + 1];
+    char instruction[max_instruction_length + 1];
     while ((buffer = fgetc(file)) != EOF) {
         if (buffer != 'm' && buffer != 'd') continue;
         if (buffer == 'm' && !enabled) continue;
@@ -65,7 +69,7 @@ int year2024_day3_part2(char *file_name) {
         fseek(file, -1, SEEK_CUR);
         long location = ftell(file);
 
-        fgets(instruction, sizeof(instruction), file);
+        fgets(instruction, (int)sizeof(instruction), file);
         fseek(file, location + 1, SEEK_SET);
 
         if (buffer == 'm')
@@ -116,6 +120,6 @@ bool enable(char *instruction, bool enabled) {
 void validate_file(FILE *file) {
     if (file != NULL) return;
 
-    perror("An error occured when opening the file");
-    exit(1);
+    perror(FOPEN_ERROR_MESSAGE);
+    exit(EXIT_FAILURE);
 }

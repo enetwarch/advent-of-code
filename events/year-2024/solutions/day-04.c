@@ -4,12 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define FILE_NAME "./events/year-2024/day-4/input.txt"
-#define ROWS 140
-#define COLS 140
-
-#define PART_ONE_ANSWER 2549
-#define PART_TWO_ANSWER 2003
+#include "../metadata.h"
 
 int y2024_d04_p1(char *file_name, int rows, int cols);
 int y2024_d04_p2(char *file_name, int rows, int cols);
@@ -20,15 +15,15 @@ bool is_valid_step(int from_index, int to_index, int rows, int cols);
 char *parse_file(char *file_name, int rows, int cols);
 
 int main(void) {
-    char *file_name = FILE_NAME;
-    int rows = ROWS;
-    int cols = COLS;
+    char *file_name = Y2024_D04_INPUT_FILE_NAME;
+    int rows = Y2024_D04_ROWS;
+    int cols = Y2024_D04_COLUMNS;
 
-    const int part_one = y2024_d04_p1(file_name, rows, cols);
-    const int part_two = y2024_d04_p2(file_name, rows, cols);
+    int p1_answer = y2024_d04_p1(file_name, rows, cols);
+    int p2_answer = y2024_d04_p2(file_name, rows, cols);
 
-    printf("Year 2024 Day 4 Part 1: %d\n", part_one);
-    printf("Year 2024 Day 4 Part 2: %d\n", part_two);
+    PRINT_ANSWER_INT(Y2024_D04_P1_LABEL, p1_answer);
+    PRINT_ANSWER_INT(Y2024_D04_P2_LABEL, p2_answer);
 
     return EXIT_SUCCESS;
 }
@@ -137,8 +132,8 @@ bool is_cross_mas(char *input, int index, int rows, int cols) {
         if (character == 'S') s_character_count++;
 
         // The directions are being checked by the opposite ends first.
-        // If two ends are the same character, that means it's either MAM or SAS.
-        // We are looking for MAS only, and this conditional handles that.
+        // If two ends are the same character, that means it's either MAM or
+        // SAS. We are looking for MAS only, and this conditional handles that.
         if (abs(m_character_count - s_character_count) > 1) return false;
     }
 
@@ -161,13 +156,13 @@ bool is_valid_step(int from_index, int to_index, int rows, int cols) {
 char *parse_file(char *file_name, int rows, int cols) {
     FILE *file = fopen(file_name, "r");
     if (file == NULL) {
-        perror("An error occured when opening the file");
+        perror(FOPEN_ERROR_MESSAGE);
         exit(EXIT_FAILURE);
     }
 
     char *input = malloc(sizeof(char) * rows * cols);
     if (input == NULL) {
-        perror("An error occured when executing malloc");
+        perror(MALLOC_ERROR_MESSAGE);
         exit(EXIT_FAILURE);
     }
 

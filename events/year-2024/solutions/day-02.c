@@ -3,67 +3,74 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define FILE_NAME "./events/year-2024/day-2/input.txt"
-#define FILE_LINES 1000
-#define MAX_LINE_LENGTH 24
-#define MAX_INT_PER_LINE 8
+#include "../metadata.h"
 
-#define PART1_ANSWER 252
-#define PART2_ANSWER 324
-
-int year2024_day2_part1(char *file_name);
-int year2024_day2_part2(char *file_name);
+int y2024_d02_p1(char *file_name, int max_line_length, int max_int_per_line);
+int y2024_d02_p2(char *file_name, int max_line_length, int max_int_per_line);
 
 bool is_safe(int *input, int length);
 bool is_safe_with_dampener(int *input, int length);
 void validate_file(FILE *file);
 
 int main(void) {
-    printf("Year 2024 Day 2 Part 1: %d\n", year2024_day2_part1(FILE_NAME));
-    printf("Year 2024 Day 2 Part 2: %d\n", year2024_day2_part2(FILE_NAME));
+    char *file_name = Y2024_D02_INPUT_FILE_NAME;
+    int max_line_length = Y2024_D02_MAX_LINE_LENGTH;
+    int max_int_per_line = Y2024_D02_MAX_INT_PER_LINE;
 
-    return 0;
+    int p1_answer = y2024_d02_p1(file_name, max_line_length, max_int_per_line);
+    int p2_answer = y2024_d02_p2(file_name, max_line_length, max_int_per_line);
+
+    PRINT_ANSWER_INT(Y2024_D02_P1_LABEL, p1_answer);
+    PRINT_ANSWER_INT(Y2024_D02_P2_LABEL, p2_answer);
+
+    return EXIT_SUCCESS;
 }
 
-int year2024_day2_part1(char *file_name) {
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+int y2024_d02_p1(char *file_name, int max_line_length, int max_int_per_line) {
     FILE *file = fopen(file_name, "r");
     validate_file(file);
 
     int safe_reports = 0;
-    char line[MAX_LINE_LENGTH + 2];
-    while (fgets(line, sizeof(line), file) != NULL) {
+    char line_buffer[max_line_length + 2];
+    while (fgets(line_buffer, (int)sizeof(line_buffer), file) != NULL) {
         // Read through each line and parses each 2-digit token to int.
         // Solving directly is more efficient than mallocing to memory.
 
-        int input[MAX_INT_PER_LINE], length = 0;
-        char *token = strtok(line, " ");
+        int max_line_length = 0;
+        int input[max_int_per_line];
+
+        char *token = strtok(line_buffer, " ");
         while (token != NULL) {
-            input[length++] = atoi(token);
+            input[max_line_length++] = atoi(token);
             token = strtok(NULL, " ");
         }
 
-        if (is_safe(input, length)) safe_reports++;
+        if (is_safe(input, max_line_length)) safe_reports++;
     }
 
     fclose(file);
     return safe_reports;
 }
 
-int year2024_day2_part2(char *file_name) {
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+int y2024_d02_p2(char *file_name, int max_line_length, int max_int_per_line) {
     FILE *file = fopen(file_name, "r");
     validate_file(file);
 
     int safe_reports = 0;
-    char line[MAX_LINE_LENGTH + 2];
-    while (fgets(line, sizeof(line), file) != NULL) {
-        int input[MAX_INT_PER_LINE], length = 0;
-        char *token = strtok(line, " ");
+    char line_buffer[max_line_length + 2];
+    while (fgets(line_buffer, (int)sizeof(line_buffer), file) != NULL) {
+        int max_line_length = 0;
+        int input[max_int_per_line];
+
+        char *token = strtok(line_buffer, " ");
         while (token != NULL) {
-            input[length++] = atoi(token);
+            input[max_line_length++] = atoi(token);
             token = strtok(NULL, " ");
         }
 
-        if (is_safe_with_dampener(input, length)) safe_reports++;
+        if (is_safe_with_dampener(input, max_line_length)) safe_reports++;
     }
 
     fclose(file);
@@ -73,7 +80,8 @@ int year2024_day2_part2(char *file_name) {
 bool is_safe(int *input, int length) {
     if (length < 2) return false;
 
-    bool is_ascending = false, is_descending = false;
+    bool is_ascending = false;
+    bool is_descending = false;
     for (int i = 0; i < length - 1; i++) {
         int difference = input[i] - input[i + 1];
 
@@ -112,6 +120,6 @@ bool is_safe_with_dampener(int *input, int length) {
 void validate_file(FILE *file) {
     if (file != NULL) return;
 
-    perror("An error occured when opening the file");
-    exit(1);
+    perror(FOPEN_ERROR_MESSAGE);
+    exit(EXIT_FAILURE);
 }
