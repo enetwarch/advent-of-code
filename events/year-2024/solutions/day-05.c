@@ -10,6 +10,7 @@ int y2024_d05_p1(char *file_name, int rule_lines, int max_int_per_line);
 int y2024_d05_p2(char *file_name, int rule_lines, int max_int_per_line);
 
 bool is_in_right_order(int *l, int *r, int lr_size, int *input, int i_size);
+void correct_order(int *l, int *r, int lr_size, int *input, int i_size);
 void parse_file(FILE *file, int *left_list, int *right_list, int lines);
 
 int main(void) {
@@ -66,17 +67,40 @@ int y2024_d05_p2(char *file_name, int rule_lines, int max_int_per_line) {
     FILE *file = fopen(file_name, "r");
     int *left = malloc(sizeof(int) * rule_lines);
     int *right = malloc(sizeof(int) * rule_lines);
+
     parse_file(file, left, right, rule_lines);
+    if (fgetc(file) != '\n') return -1;
+
+    int answer = 0;
+    int max_line_length = (max_int_per_line * 3) - 1;
+    char line_buffer[max_line_length + 2];
+    while (fgets(line_buffer, (int)sizeof(line_buffer), file) != NULL) {
+        int input[max_int_per_line];
+        int i_size = 0;
+
+        char *token = strtok(line_buffer, ",");
+        while (token != NULL) {
+            input[i_size++] = atoi(token);
+            token = strtok(NULL, ",");
+        }
+
+        int lr_size = rule_lines;
+        if (is_in_right_order(left, right, lr_size, input, i_size)) continue;
+
+        correct_order(left, right, lr_size, input, i_size);
+        // NOLINTNEXTLINE(clang-analyzer-core.uninitialized.Assign)
+        answer += input[(int)(i_size / 2)];
+    }
 
     fclose(file);
     free(left);
     free(right);
-    return 0;
+    return answer;
 }
 
 // The arguments are hard to reason with and may seem ambiguous.
 // I can make a struct just for this use case, but I decided not to.
-// Just shortening the argument names is enough.
+// Just shortening the argument names is enough for a practice codebase.
 // In exchange, variables have descriptive names when accessing the pointers.
 // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 bool is_in_right_order(int *l, int *r, int lr_size, int *input, int i_size) {
@@ -84,6 +108,10 @@ bool is_in_right_order(int *l, int *r, int lr_size, int *input, int i_size) {
         for (int j = 0; j < lr_size; j++) {
             int right_list_element = r[j];
             int current_order_element = input[i];
+
+            // Check all instances of current order element in the right list.
+            // If there is a match, look at further order elements.
+            // If further order elements violate the rule, return false.
 
             if (right_list_element != current_order_element) continue;
 
@@ -97,6 +125,33 @@ bool is_in_right_order(int *l, int *r, int lr_size, int *input, int i_size) {
     }
 
     return true;
+}
+
+void correct_order(int *l, int *r, int lr_size, int *input, int i_size) {
+    for (int i = 0; i < i_size - 1; i++) {
+        for (int j = 0; j < lr_size; j++) {
+            int right_list_element = r[j];
+            int current_order_element = input[i];
+
+            // Has very similar implementation to the previous bool function.
+            // Uses recursion to keep resorting again and again.
+
+            if (right_list_element != current_order_element) continue;
+
+            for (int k = i + 1; k < i_size; k++) {
+                int left_list_element = l[j];
+                int upcoming_order_element = input[k];
+
+                if (upcoming_order_element != left_list_element) continue;
+
+                int temporary_element = input[k - 1];
+                input[k - 1] = upcoming_order_element;
+                input[k] = temporary_element;
+
+                correct_order(l, r, lr_size, input, i_size);
+            }
+        }
+    }
 }
 
 void parse_file(FILE *file, int *left_list, int *right_list, int lines) {

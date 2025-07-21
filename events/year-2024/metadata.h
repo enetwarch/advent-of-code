@@ -50,8 +50,8 @@
 #define Y2024_D05_INPUT_FILE_NAME Y2024_INPUT_DIRECTORY "day-05.txt"
 #define Y2024_D05_RULE_LINES 1176
 #define Y2024_D05_MAX_INT_PER_LINE 23
-#define Y2024_D05_P1_ANSWER 0
-#define Y2024_D05_P2_ANSWER 0
+#define Y2024_D05_P1_ANSWER 5713
+#define Y2024_D05_P2_ANSWER 5180
 
 // The following are constants for error messages.
 // Each error message will refer to a specific standard library function.
