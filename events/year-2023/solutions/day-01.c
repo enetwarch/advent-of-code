@@ -9,10 +9,9 @@
 int y2023_d01_p1(char *file_name, int max_line_length);
 int y2023_d01_p2(char *file_name, int max_line_length);
 
+void get_edge_digits(char *digits, char *line_buffer);
+void digitify_digit_strings(char *line_buffer);
 void validate_file(FILE *file);
-
-void bubble_sort_list(int *list, int length);
-int *parse_file(char *file_name, int lines, int line_length, char position);
 
 int main(void) {
     char *file_name = Y2023_D01_INPUT_FILE_NAME;
@@ -36,13 +35,7 @@ int y2023_d01_p1(char *file_name, int max_line_length) {
     while (fgets(line_buffer, (int)sizeof(line_buffer), file) != NULL) {
         char digits[3] = {-1, -1, '\0'};
 
-        for (int i = 0; line_buffer[i] != '\0'; i++) {
-            if (!isdigit(line_buffer[i])) continue;
-            digits[digits[0] == -1 ? 0 : 1] = line_buffer[i];
-        }
-
-        // NOLINTNEXTLINE(bugprone-narrowing-conversions)
-        digits[1] = digits[1] == -1 ? digits[0] : digits[1];
+        get_edge_digits(digits, line_buffer);
         answer += atoi(digits);
     }
 
@@ -54,10 +47,44 @@ int y2023_d01_p2(char *file_name, int max_line_length) {
     FILE *file = fopen(file_name, "r");
     validate_file(file);
 
-    (void)(max_line_length);
+    int answer = 0;
+    char line_buffer[max_line_length + 2];
+    while (fgets(line_buffer, (int)sizeof(line_buffer), file) != NULL) {
+        char digits[3] = {-1, -1, '\0'};
+
+        digitify_digit_strings(line_buffer);
+        get_edge_digits(digits, line_buffer);
+        answer += atoi(digits);
+    }
 
     fclose(file);
-    return 0;
+    return answer;
+}
+
+void get_edge_digits(char *digits, char *line_buffer) {
+    for (size_t i = 0; i < strlen(line_buffer); i++) {
+        if (!isdigit(line_buffer[i])) continue;
+        digits[digits[0] == -1 ? 0 : 1] = line_buffer[i];
+    }
+
+    // NOLINTNEXTLINE(bugprone-narrowing-conversions)
+    digits[1] = digits[1] == -1 ? digits[0] : digits[1];
+}
+
+void digitify_digit_strings(char *line_buffer) {
+    char *strings[10] = {"zero", "one", "two",   "three", "four",
+                         "five", "six", "seven", "eight", "nine"};
+
+    for (int i = 0; i < (int)(sizeof(strings) / sizeof(strings[0])); i++) {
+        char *matching_string = strstr(line_buffer, strings[i]);
+        if (matching_string == NULL) continue;
+
+        int ascii_offset = 48;
+
+        // NOLINTNEXTLINE(bugprone-narrowing-conversions)
+        matching_string[(int)(strlen(strings[i]) / 2)] = i + ascii_offset;
+        digitify_digit_strings(line_buffer);
+    }
 }
 
 void validate_file(FILE *file) {

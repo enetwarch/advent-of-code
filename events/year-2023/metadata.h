@@ -12,9 +12,9 @@
 #define Y2023_D01_P1_LABEL "Year 2023 Day 1 Part 1"
 #define Y2023_D01_P2_LABEL "Year 2023 Day 1 Part 2"
 #define Y2023_D01_INPUT_FILE_NAME Y2023_INPUT_DIRECTORY "day-01.txt"
-#define Y2023_D01_MAX_LINE_LENGTH 50
+#define Y2023_D01_MAX_LINE_LENGTH 60
 #define Y2023_D01_P1_ANSWER 54877
-#define Y2023_D01_P2_ANSWER 0
+#define Y2023_D01_P2_ANSWER 54100
 
 // The following are constants for error messages.
 // Each error message will refer to a specific standard library function.
