@@ -22,7 +22,7 @@
 #define Y2023_D02_INPUT_FILE_NAME Y2023_INPUT_DIRECTORY "day-02.txt"
 #define Y2023_D02_MAX_LINE_LENGTH 200
 #define Y2023_D02_P1_ANSWER 2512
-#define Y2023_D02_P2_ANSWER 0
+#define Y2023_D02_P2_ANSWER 67335
 
 // The following are constants for error messages.
 // Each error message will refer to a specific standard library function.
