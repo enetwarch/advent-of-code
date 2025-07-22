@@ -101,7 +101,7 @@ int get_power_of_minimum_cubes(char *line_buffer) {
         for (int i = 0; i < RGB_CUBE_VARIANTS; i++) {
             if (strcmp(cube_color, rgb_cube_colors[i]) != 0) continue;
             if (cube_amount <= rgb_minimum_cube_count[i]) break;
-            
+
             rgb_minimum_cube_count[i] = cube_amount;
             break;
         }
