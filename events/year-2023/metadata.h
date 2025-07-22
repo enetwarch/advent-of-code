@@ -31,7 +31,7 @@
 #define Y2023_D03_ROWS 140
 #define Y2023_D03_COLUMNS 140
 #define Y2023_D03_P1_ANSWER 521601
-#define Y2023_D03_P2_ANSWER 0
+#define Y2023_D03_P2_ANSWER 80694070
 
 // The following are constants for error messages.
 // Each error message will refer to a specific standard library function.
