@@ -40,7 +40,7 @@
 #define Y2023_D04_WINNING_AMOUNT 10
 #define Y2023_D04_OWN_AMOUNT 25
 #define Y2023_D04_P1_ANSWER 18653
-#define Y2023_D04_P2_ANSWER 0
+#define Y2023_D04_P2_ANSWER 5921508
 
 // The following are constants for error messages.
 // Each error message will refer to a specific standard library function.

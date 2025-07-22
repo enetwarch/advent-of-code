@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -10,7 +11,8 @@
 int y2023_d04_p1(char *file_name, int winning_amount, int own_amount);
 int y2023_d04_p2(char *file_name, int winning_amount, int own_amount);
 
-int calculate_points(char *line_buffer, int winning_amount, int own_amount);
+int count_matching(char *line_buffer, int winning_amount, int own_amount);
+int process_card_buffer(int *card_buffer, int buffer_size, int matching);
 void parse_numbers(char *line_buffer, int *numbers, int amount, char *del);
 void validate_file(FILE *file);
 
@@ -35,45 +37,68 @@ int y2023_d04_p1(char *file_name, int winning_amount, int own_amount) {
     int points = 0;
     char line_buffer[(winning_amount * 3) + (own_amount * 3) + 20];
     while (fgets(line_buffer, (int)sizeof(line_buffer), file) != NULL) {
-        points += calculate_points(line_buffer, winning_amount, own_amount);
+        int matching = count_matching(line_buffer, winning_amount, own_amount);
+        points += matching == 0 ? 0 : (int)pow(2, matching - 1);
     }
 
     fclose(file);
     return points;
 }
 
-// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 int y2023_d04_p2(char *file_name, int winning_amount, int own_amount) {
     FILE *file = fopen(file_name, "r");
     validate_file(file);
 
-    (void)winning_amount;
-    (void)own_amount;
-    int points = 0;
+    int cards = 0;
+    int card_buffer[winning_amount];
+    // NOLINTNEXTLINE(clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling)
+    memset(card_buffer, 0, sizeof(card_buffer));
+
+    char line_buffer[(winning_amount * 3) + (own_amount * 3) + 20];
+    while (fgets(line_buffer, (int)sizeof(line_buffer), file) != NULL) {
+        int matching = count_matching(line_buffer, winning_amount, own_amount);
+        cards += process_card_buffer(card_buffer, winning_amount, matching);
+    }
 
     fclose(file);
-    return points;
+    return cards;
 }
 
 // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-int calculate_points(char *line_buffer, int winning_amount, int own_amount) {
+int count_matching(char *line_buffer, int winning_amount, int own_amount) {
     int winning_numbers[winning_amount];
     int own_numbers[own_amount];
 
     parse_numbers(line_buffer, winning_numbers, winning_amount, ":|");
     parse_numbers(line_buffer, own_numbers, own_amount, "|");
 
-    int points = 0;
+    int matching_count = 0;
     for (int i = 0; i < winning_amount; i++) {
         for (int j = 0; j < own_amount; j++) {
             if (winning_numbers[i] != own_numbers[j]) continue;
 
-            points = points == 0 ? 1 : points * 2;
+            matching_count++;
             break;
         }
     }
 
-    return points;
+    return matching_count;
+}
+
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+int process_card_buffer(int *card_buffer, int buffer_size, int matching) {
+    int scratchcards = card_buffer[0] + 1;
+
+    for (int i = 0; i < buffer_size - 1; i++) {
+        card_buffer[i] = card_buffer[i + 1];
+    }
+    card_buffer[buffer_size - 1] = 0;
+
+    for (int i = 0; i < matching; i++) {
+        card_buffer[i] += scratchcards;
+    }
+
+    return scratchcards;
 }
 
 void parse_numbers(char *line_buffer, int *numbers, int amount, char *del) {
