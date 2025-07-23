@@ -5,8 +5,8 @@
 // File names will be written relative to the root of the repository.
 // Macros, error messages and other useful constants are included.
 
-#define Y2024_SOLUTIONS_DIRECTORY "./events/year-2024/solutions/"
-#define Y2024_INPUT_DIRECTORY "./events/year-2024/input/"
+#define Y2024_SOLUTIONS_DIRECTORY "./solutions/"
+#define Y2024_INPUT_DIRECTORY "./input/"
 
 // Problem: https://adventofcode.com/2024/day/1
 #define Y2024_D01_P1_LABEL "Year 2024 Day 1 Part 1"
