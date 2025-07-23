@@ -14,12 +14,14 @@ advent-of-code/ # repository
 |  |--target/ # binary files
 |  |  |--day-*.* # day of the binary file
 |  |--metadata.h # reusable constants
-|  |--Makefile # automation tool
-|  |--... # other files
+|  |--Makefile # workspace-specific automation tool
+|  |--... # other files...
+|--Makefile # universal automation tool
 |--README.md # this documentation file
+|--... # other files...
 ```
 
-The directory structure for this repository is very simple and short. Every year has a dedicated [`year-*/`](./year-2024/) directory that contains a predetermined structure as shown above. Inside [`input/`](./year-2024/input/), [`solutions/`](./year-2024/solutions/), and `target/` directories, each file will be named `day-*` followed by their file extension. The [`Makefile`](./Makefile) contains all the useful build tools and utility scripts for formatting, and linting. To learn more, read the comments in the `Makefile` for more details.
+The directory structure for this repository is very simple and short. Every year has a dedicated `year-*/` directory that contains a predetermined structure as shown above. Inside `input/`, `solutions/`, and `target/` directories, each file will be named `day-*` followed by their file extension. The `Makefile` contains all the useful build tools and utility scripts for formatting, and linting. To learn more, read the comments in the `Makefile` for more details.
 
 ## License
 
