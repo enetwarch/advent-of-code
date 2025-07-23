@@ -6,15 +6,20 @@ This repository contains **my own personal solutions** to [Advent of Code](https
 
 ```bash
 advent-of-code/ # repository
-|--.github/ # github specific files and ci/cd pipelines
-|--events/ # organized solutions directory
-|--LICENSE # mit license
+|--year-*/ # problem year
+|  |--input/ # problem input files
+|  |  |--day-*.txt # day of the problem input
+|  |--solutions/ # solution files
+|  |  |--day-*.* # day of the solution file
+|  |--target/ # binary files
+|  |  |--day-*.* # day of the binary file
+|  |--metadata.h # reusable constants
+|  |--Makefile # automation tool
+|  |--... # other files
 |--README.md # this documentation file
-|--Makefile # automation tool
-|--... # other files
 ```
 
-The directory structure for this repository is very simple and short. All the solutions go to the [`events/`](./events/) directory which has its own `README.md` file for documentation. The [`Makefile`](./Makefile) contains all the useful build tools and utility scripts for formatting, and linting. To learn more, read the comments in the `Makefile` for more details. Each major directory will have their own documentation file as well to avoid cluttering this document.
+The directory structure for this repository is very simple and short. Every year has a dedicated [`year-*/`](./year-2024/) directory that contains a predetermined structure as shown above. Inside [`input/`](./year-2024/input/), [`solutions/`](./year-2024/solutions/), and `target/` directories, each file will be named `day-*` followed by their file extension. The [`Makefile`](./Makefile) contains all the useful build tools and utility scripts for formatting, and linting. To learn more, read the comments in the `Makefile` for more details.
 
 ## License
 
