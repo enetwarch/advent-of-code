@@ -23,7 +23,7 @@ func Y2025D2P1(filename string) int64 {
 	var answer int64 = 0
 	for _, v := range ranges {
 		for id := v.Lower; id <= v.Upper; id++ {
-			if isInvalidID(id) {
+			if isInvalidIDPart1(id) {
 				answer += id
 			}
 		}
@@ -32,12 +32,56 @@ func Y2025D2P1(filename string) int64 {
 	return answer
 }
 
-func isInvalidID(id int64) bool {
+func Y2025D2P2(filename string) int64 {
+	ranges, err := parseFile(filename)
+	if err != nil {
+		log.Fatalf("failed to parse file: %s", err)
+	}
+
+	var answer int64 = 0
+	for _, v := range ranges {
+		for id := v.Lower; id <= v.Upper; id++ {
+			if isInvalidIDPart2(id) {
+				answer += id
+			}
+		}
+	}
+
+	return answer
+}
+
+func isInvalidIDPart1(id int64) bool {
 	stringifiedId := strconv.FormatInt(id, 10)
 	midIndex := len(stringifiedId) / 2
 
 	return (len(stringifiedId)%2 == 0 &&
 		stringifiedId[midIndex:] == stringifiedId[:midIndex])
+}
+
+func isInvalidIDPart2(id int64) bool {
+	stringifiedId := strconv.FormatInt(id, 10)
+
+	for length := 1; length <= len(stringifiedId)/2; length++ {
+		if len(stringifiedId)%length != 0 {
+			continue
+		}
+
+		toRepeat := stringifiedId[:length]
+		isInvalid := true
+
+		for i := length; i < len(stringifiedId); i += length {
+			if stringifiedId[i:(i+length)] != toRepeat {
+				isInvalid = false
+				break
+			}
+		}
+
+		if isInvalid {
+			return true
+		}
+	}
+
+	return false
 }
 
 func parseFile(filename string) (ranges []Range, err error) {
