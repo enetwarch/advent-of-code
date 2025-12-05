@@ -68,7 +68,6 @@ func Y2025D1P2(filename string) int {
 		if dial == 0 {
 			password++
 		}
-		fmt.Printf("Dial: %d, Passes: %d, Password: %d\n", dial, passes, password)
 	}
 
 	return password
