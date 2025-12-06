@@ -6,11 +6,6 @@ import (
 	"os"
 )
 
-type Coordinates struct {
-	I int
-	J int
-}
-
 func Y2025D4P1(filename string) int {
 	grid, err := parseToiletPaperGrid(filename)
 	if err != nil {

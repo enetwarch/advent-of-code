@@ -9,11 +9,6 @@ import (
 	"strings"
 )
 
-type Range struct {
-	Lower int64
-	Upper int64
-}
-
 func Y2025D2P1(filename string) int64 {
 	ranges, err := parseLineRanges(filename)
 	if err != nil {
