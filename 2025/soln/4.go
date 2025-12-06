@@ -6,6 +6,11 @@ import (
 	"os"
 )
 
+type Coordinates struct {
+	I int
+	J int
+}
+
 func Y2025D4P1(filename string) int {
 	grid, err := parseToiletPaperGrid(filename)
 	if err != nil {
@@ -36,11 +41,11 @@ func Y2025D4P2(filename string) int {
 	return cleanedRolls
 }
 
-func accessToiletPaperGrid(grid [][]rune) (accessed int, cleaned [][]int) {
+func accessToiletPaperGrid(grid [][]rune) (accessed int, cleaned []Coordinates) {
 	for i := 0; i < len(grid); i++ {
 		for j := 0; j < len(grid[i]); j++ {
 			if grid[i][j] == '@' && isAccessibleByForklift(grid, i, j) {
-				cleaned = append(cleaned, []int{i, j})
+				cleaned = append(cleaned, Coordinates{i, j})
 				accessed++
 			}
 		}
@@ -49,9 +54,9 @@ func accessToiletPaperGrid(grid [][]rune) (accessed int, cleaned [][]int) {
 	return accessed, cleaned
 }
 
-func cleanToiletPaperGrid(grid [][]rune, cleaned [][]int) {
+func cleanToiletPaperGrid(grid [][]rune, cleaned []Coordinates) {
 	for _, v := range cleaned {
-		i, j := v[0], v[1]
+		i, j := v.I, v.J
 		grid[i][j] = '.'
 	}
 }
