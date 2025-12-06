@@ -15,7 +15,7 @@ type Range struct {
 }
 
 func Y2025D2P1(filename string) int64 {
-	ranges, err := parseFile(filename)
+	ranges, err := parseLineRanges(filename)
 	if err != nil {
 		log.Fatalf("failed to parse file: %s", err)
 	}
@@ -33,7 +33,7 @@ func Y2025D2P1(filename string) int64 {
 }
 
 func Y2025D2P2(filename string) int64 {
-	ranges, err := parseFile(filename)
+	ranges, err := parseLineRanges(filename)
 	if err != nil {
 		log.Fatalf("failed to parse file: %s", err)
 	}
@@ -84,7 +84,7 @@ func isInvalidIDPart2(id int64) bool {
 	return false
 }
 
-func parseFile(filename string) (ranges []Range, err error) {
+func parseLineRanges(filename string) (ranges []Range, err error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open file: %s", err)
