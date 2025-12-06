@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -25,6 +26,15 @@ func Y2025D5P1(filename string) int {
 	return freshIds
 }
 
+func Y2025D5P2(filename string) int64 {
+	ranges, _, err := parseFreshRangeAndIDs(filename)
+	if err != nil {
+		log.Fatalf("failed to parse fresh range and ids: %s", err)
+	}
+
+	return countFreshIds(ranges)
+}
+
 func isFreshId(ranges []Range, id int64) bool {
 	for _, v := range ranges {
 		if id >= v.Lower && id <= v.Upper {
@@ -33,6 +43,27 @@ func isFreshId(ranges []Range, id int64) bool {
 	}
 
 	return false
+}
+
+func countFreshIds(ranges []Range) int64 {
+	sort.Slice(ranges, func(i int, j int) bool {
+		return ranges[i].Lower < ranges[j].Lower
+	})
+
+	var freshIds int64 = 0
+	var currentHighestUpper int64 = 0
+
+	for i := 0; i < len(ranges); i++ {
+		if ranges[i].Lower > currentHighestUpper {
+			freshIds += ranges[i].Upper - ranges[i].Lower + 1
+			currentHighestUpper = ranges[i].Upper
+		} else if ranges[i].Upper > currentHighestUpper {
+			freshIds += ranges[i].Upper - currentHighestUpper
+			currentHighestUpper = ranges[i].Upper
+		}
+	}
+
+	return freshIds
 }
 
 func parseFreshRangeAndIDs(filename string) (ranges []Range, ids []int64, err error) {
