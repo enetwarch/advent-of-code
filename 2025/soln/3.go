@@ -13,6 +13,7 @@ func Y2025D3P1(filename string) int64 {
 	if err != nil {
 		log.Fatalf("failed to open file: %s", err)
 	}
+	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	var totalJoltage int64 = 0
@@ -24,7 +25,6 @@ func Y2025D3P1(filename string) int64 {
 		if err != nil {
 			log.Fatalf("failed to get largest joltage: %s", err)
 		}
-
 		totalJoltage += joltage
 	}
 
@@ -36,6 +36,7 @@ func Y2025D3P2(filename string) int64 {
 	if err != nil {
 		log.Fatalf("failed to open file: %s", err)
 	}
+	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	var totalJoltage int64 = 0
@@ -47,7 +48,6 @@ func Y2025D3P2(filename string) int64 {
 		if err != nil {
 			log.Fatalf("failed to get largest joltage: %s", err)
 		}
-
 		totalJoltage += joltage
 	}
 

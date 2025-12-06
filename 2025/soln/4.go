@@ -29,8 +29,8 @@ func Y2025D4P2(filename string) int {
 			break
 		}
 
-		cleanedRolls += accessed
 		cleanToiletPaperGrid(grid, cleaned)
+		cleanedRolls += accessed
 	}
 
 	return cleanedRolls
@@ -91,6 +91,7 @@ func parseToiletPaperGrid(filename string) (grid [][]rune, err error) {
 	if err != nil {
 		return nil, err
 	}
+	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {

@@ -15,6 +15,7 @@ func Y2025D1P1(filename string) int {
 	if err != nil {
 		log.Fatalf("failed to open file: %s", err)
 	}
+	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	password := 0
@@ -46,6 +47,7 @@ func Y2025D1P2(filename string) int {
 	if err != nil {
 		log.Fatalf("failed to open file: %s", err)
 	}
+	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	password := 0
@@ -103,7 +105,6 @@ func rotateDial(dial int, rotation rune, degree int) (new int, passes int) {
 		} else {
 			passes = -(dial - degree - 99) / 100
 		}
-
 		return new, passes
 	}
 

@@ -89,6 +89,7 @@ func parseLineRanges(filename string) (ranges []Range, err error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to open file: %s", err)
 	}
+	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	ranges = []Range{}
