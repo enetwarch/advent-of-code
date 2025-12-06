@@ -2,6 +2,7 @@ package soln
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -10,33 +11,47 @@ import (
 )
 
 func Y2025D6P1(filename string) int {
-	calculations, err := parseMathHomework(filename)
+	homeworks, err := parseMathHomeworkNormally(filename)
 	if err != nil {
 		log.Fatalf("failed to parse math homework: %s", err)
 	}
 
 	total := 0
-	for _, calculation := range calculations {
-		answer := calculateCalculations(calculation)
+	for _, homework := range homeworks {
+		answer := answerHomework(homework)
 		total += answer
 	}
 	return total
 }
 
-func calculateCalculations(calculation Calculations) int {
-	answer := calculation.Numbers[0]
-	for i := 1; i < len(calculation.Numbers); i++ {
-		switch calculation.Operation {
+func Y2025D6P2(filename string) int {
+	homeworks, err := parseMathHomeworkVertically(filename)
+	if err != nil {
+		log.Fatalf("failed to parse math homework: %s", err)
+	}
+
+	total := 0
+	for i := len(homeworks) - 1; i >= 0; i-- {
+		answer := answerHomework(homeworks[i])
+		total += answer
+	}
+	return total
+}
+
+func answerHomework(homework Homework) int {
+	answer := homework.Numbers[0]
+	for i := 1; i < len(homework.Numbers); i++ {
+		switch homework.Operation {
 		case '+':
-			answer += calculation.Numbers[i]
+			answer += homework.Numbers[i]
 		case '*':
-			answer *= calculation.Numbers[i]
+			answer *= homework.Numbers[i]
 		}
 	}
 	return answer
 }
 
-func parseMathHomework(filename string) (calculations []Calculations, err error) {
+func parseMathHomeworkNormally(filename string) (homeworks []Homework, err error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -51,7 +66,7 @@ func parseMathHomework(filename string) (calculations []Calculations, err error)
 			return nil, err
 		}
 
-		calculations = append(calculations, Calculations{[]int{number}, 0})
+		homeworks = append(homeworks, Homework{[]int{number}, 0})
 	}
 
 	for scanner.Scan() {
@@ -62,14 +77,58 @@ func parseMathHomework(filename string) (calculations []Calculations, err error)
 				if err != nil {
 					return nil, err
 				}
-				calculations[i].Numbers = append(calculations[i].Numbers, number)
+				homeworks[i].Numbers = append(homeworks[i].Numbers, number)
 			}
 		} else {
 			for i, v := range strings.Fields(line) {
-				calculations[i].Operation = rune(strings.TrimSpace(v)[0])
+				homeworks[i].Operation = rune(strings.TrimSpace(v)[0])
 			}
 		}
 	}
 
-	return calculations, nil
+	return homeworks, nil
+}
+
+func parseMathHomeworkVertically(filename string) (homeworks []Homework, err error) {
+	file, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	scanner := bufio.NewScanner(file)
+	var lines []string
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	for _, line := range lines {
+		if len(line) != len(lines[0]) {
+			return nil, fmt.Errorf("unbalanced lines")
+		}
+	}
+
+	hIndex := 0
+	for j := len(lines[0]) - 1; j >= 0; j-- {
+		if len(homeworks) == hIndex {
+			homeworks = append(homeworks, Homework{})
+		}
+
+		number := 0
+		for i := 0; i < len(lines); i++ {
+			char := rune(lines[i][j])
+			if unicode.IsDigit(char) {
+				number = (number * 10) + int(char-'0')
+			} else if char == '+' || char == '*' {
+				homeworks[hIndex].Operation = char
+			}
+		}
+
+		if number == 0 {
+			hIndex++
+		} else {
+			homeworks[hIndex].Numbers = append(homeworks[hIndex].Numbers, number)
+		}
+	}
+
+	return homeworks, nil
 }

@@ -10,7 +10,7 @@ type Coordinates struct {
 	J int
 }
 
-type Calculations struct {
+type Homework struct {
 	Numbers   []int
 	Operation rune
 }
