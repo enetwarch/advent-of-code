@@ -10,6 +10,11 @@ import (
 	"unicode"
 )
 
+type Homework struct {
+	Numbers   []int
+	Operation rune
+}
+
 func Y2025D6P1(filename string) int {
 	homeworks, err := parseMathHomeworkNormally(filename)
 	if err != nil {
