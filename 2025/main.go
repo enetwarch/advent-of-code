@@ -25,4 +25,5 @@ func main() {
 	fmt.Printf("Year 2025 Day 6 Part 2: %d\n", soln.Y2025D6P2("./input/6.txt"))
 
 	fmt.Printf("Year 2025 Day 7 Part 1: %d\n", soln.Y2025D7P1("./input/7.txt"))
+	fmt.Printf("Year 2025 Day 7 Part 2: %d\n", soln.Y2025D7P2("./input/7.txt"))
 }
