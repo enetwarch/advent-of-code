@@ -61,6 +61,7 @@ func parseMathHomeworkNormally(filename string) (homeworks []Homework, err error
 	if err != nil {
 		return nil, err
 	}
+	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	scanner.Scan()
