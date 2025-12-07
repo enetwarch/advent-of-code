@@ -54,16 +54,12 @@ func calculateBeamSplitTimelines(manifold []string) (splits int, timelines int, 
 	}
 
 	for i := 1; i < len(manifold); i++ {
-		for j := 0; j < len(manifold[i]); j++ {
-			if manifold[i][j] != '^' {
-				continue
-			}
-
-			if count, exists := beamIndices[j]; exists {
+		for j, timelinesHere := range beamIndices {
+			if manifold[i][j] == '^' {
 				delete(beamIndices, j)
-				beamIndices[j-1] += count
-				beamIndices[j+1] += count
-				timelines += count
+				beamIndices[j-1] += timelinesHere
+				beamIndices[j+1] += timelinesHere
+				timelines += timelinesHere
 				splits++
 			}
 		}
