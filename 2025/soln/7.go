@@ -30,7 +30,7 @@ func Y2025D7P2(filename string) int {
 
 	_, timelines, err := calculateBeamSplitTimelines(manifold)
 	if err != nil {
-		log.Fatalf("failed to calculate beam splits: %s", err)
+		log.Fatalf("failed to calculate beam timelines: %s", err)
 	}
 
 	return timelines
