@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func Y2025D7P1(filename string) int {
+func Y2025D07P1(filename string) int {
 	manifold, err := parseTachyonManifold(filename)
 	if err != nil {
 		log.Fatalf("failed to parse tachyon manifold: %s", err)
@@ -22,7 +22,7 @@ func Y2025D7P1(filename string) int {
 	return splits
 }
 
-func Y2025D7P2(filename string) int {
+func Y2025D07P2(filename string) int {
 	manifold, err := parseTachyonManifold(filename)
 	if err != nil {
 		log.Fatalf("failed to parse tachyon manifold: %s", err)

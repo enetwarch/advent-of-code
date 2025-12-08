@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func Y2025D3P1(filename string) int64 {
+func Y2025D03P1(filename string) int64 {
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Fatalf("failed to open file: %s", err)
@@ -31,7 +31,7 @@ func Y2025D3P1(filename string) int64 {
 	return totalJoltage
 }
 
-func Y2025D3P2(filename string) int64 {
+func Y2025D03P2(filename string) int64 {
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Fatalf("failed to open file: %s", err)

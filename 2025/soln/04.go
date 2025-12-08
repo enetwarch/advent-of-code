@@ -11,7 +11,7 @@ type Coordinates struct {
 	J int
 }
 
-func Y2025D4P1(filename string) int {
+func Y2025D04P1(filename string) int {
 	grid, err := parseToiletPaperGrid(filename)
 	if err != nil {
 		log.Fatalf("failed to parse toiler paper grid: %s", err)
@@ -21,7 +21,7 @@ func Y2025D4P1(filename string) int {
 	return accessibleRolls
 }
 
-func Y2025D4P2(filename string) int {
+func Y2025D04P2(filename string) int {
 	grid, err := parseToiletPaperGrid(filename)
 	if err != nil {
 		log.Fatalf("failed to parse toiler paper grid: %s", err)

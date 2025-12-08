@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func Y2025D1P1(filename string) int {
+func Y2025D01P1(filename string) int {
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Fatalf("failed to open file: %s", err)
@@ -42,7 +42,7 @@ func Y2025D1P1(filename string) int {
 	return password
 }
 
-func Y2025D1P2(filename string) int {
+func Y2025D01P2(filename string) int {
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Fatalf("failed to open file: %s", err)

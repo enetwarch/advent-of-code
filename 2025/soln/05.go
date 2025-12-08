@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func Y2025D5P1(filename string) int {
+func Y2025D05P1(filename string) int {
 	ranges, ids, err := parseFreshRangeAndIDs(filename)
 	if err != nil {
 		log.Fatalf("failed to parse fresh range and ids: %s", err)
@@ -26,7 +26,7 @@ func Y2025D5P1(filename string) int {
 	return freshIds
 }
 
-func Y2025D5P2(filename string) int64 {
+func Y2025D05P2(filename string) int64 {
 	ranges, _, err := parseFreshRangeAndIDs(filename)
 	if err != nil {
 		log.Fatalf("failed to parse fresh range and ids: %s", err)

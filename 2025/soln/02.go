@@ -14,7 +14,7 @@ type Range struct {
 	Upper int64
 }
 
-func Y2025D2P1(filename string) int64 {
+func Y2025D02P1(filename string) int64 {
 	ranges, err := parseLineRanges(filename)
 	if err != nil {
 		log.Fatalf("failed to parse file: %s", err)
@@ -32,7 +32,7 @@ func Y2025D2P1(filename string) int64 {
 	return answer
 }
 
-func Y2025D2P2(filename string) int64 {
+func Y2025D02P2(filename string) int64 {
 	ranges, err := parseLineRanges(filename)
 	if err != nil {
 		log.Fatalf("failed to parse file: %s", err)

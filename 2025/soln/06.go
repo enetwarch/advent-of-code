@@ -15,7 +15,7 @@ type Homework struct {
 	Operation rune
 }
 
-func Y2025D6P1(filename string) int {
+func Y2025D06P1(filename string) int {
 	homeworks, err := parseMathHomeworkNormally(filename)
 	if err != nil {
 		log.Fatalf("failed to parse math homework: %s", err)
@@ -29,7 +29,7 @@ func Y2025D6P1(filename string) int {
 	return total
 }
 
-func Y2025D6P2(filename string) int {
+func Y2025D06P2(filename string) int {
 	homeworks, err := parseMathHomeworkVertically(filename)
 	if err != nil {
 		log.Fatalf("failed to parse math homework: %s", err)
