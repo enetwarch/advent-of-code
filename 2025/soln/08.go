@@ -40,7 +40,7 @@ func Y2025D08P1(filename string) int {
 		return distances[i].distance < distances[j].distance
 	})
 
-	unionFind := newUnionFind(coordinates)
+	unionFind := newUnionFindD08(coordinates)
 	for i := 0; i < len(coordinates); i++ {
 		coord1 := distances[i].coordinates1
 		coord2 := distances[i].coordinates2
@@ -77,7 +77,7 @@ func Y2025D08P2(filename string) int {
 		return distances[i].distance < distances[j].distance
 	})
 
-	unionFind := newUnionFind(coordinates)
+	unionFind := newUnionFindD08(coordinates)
 	connections := 0
 	var x1, x2 int
 	for _, distance := range distances {
@@ -95,7 +95,7 @@ func Y2025D08P2(filename string) int {
 	return x1 * x2
 }
 
-func newUnionFind(coordinates []*CoordinatesD08) UnionFindD08 {
+func newUnionFindD08(coordinates []*CoordinatesD08) UnionFindD08 {
 	unionFind := UnionFindD08{
 		parent: make(map[*CoordinatesD08]*CoordinatesD08),
 		size:   make(map[*CoordinatesD08]int),
