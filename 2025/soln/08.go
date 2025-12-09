@@ -33,7 +33,6 @@ func Y2025D08P1(filename string) int {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Coordinate size: %d\n", len(coordinates))
 
 	distances := distancesD08(coordinates)
 	sort.Slice(distances, func(i int, j int) bool {
@@ -71,7 +70,6 @@ func Y2025D08P2(filename string) int {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Coordinate size: %d\n", len(coordinates))
 
 	distances := distancesD08(coordinates)
 	sort.Slice(distances, func(i int, j int) bool {
@@ -94,7 +92,6 @@ func Y2025D08P2(filename string) int {
 			}
 		}
 	}
-	fmt.Println(x1, x2)
 	return x1 * x2
 }
 
