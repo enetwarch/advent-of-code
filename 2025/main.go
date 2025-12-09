@@ -27,6 +27,8 @@ func main() {
 
 	printAnswer(7, 1, soln.Y2025D07P1, "./input/07.txt")
 	printAnswer(7, 2, soln.Y2025D07P2, "./input/07.txt")
+
+	printAnswer(8, 1, soln.Y2025D08P1, "./input/08.txt")
 }
 
 func printAnswer[T any](day, part int, solver func(string) T, filename string) {
