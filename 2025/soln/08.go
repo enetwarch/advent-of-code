@@ -66,6 +66,38 @@ func Y2025D08P1(filename string) int {
 	return answer
 }
 
+func Y2025D08P2(filename string) int {
+	coordinates, err := parseD08(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Coordinate size: %d\n", len(coordinates))
+
+	distances := distancesD08(coordinates)
+	sort.Slice(distances, func(i int, j int) bool {
+		// This will sort distances by ascending distance.
+		return distances[i].distance < distances[j].distance
+	})
+
+	unionFind := newUnionFind(coordinates)
+	connections := 0
+	var x1, x2 int
+	for _, distance := range distances {
+		coord1 := distance.coordinates1
+		coord2 := distance.coordinates2
+		if unionFind.find(coord1) != unionFind.find(coord2) {
+			unionFind.union(coord1, coord2)
+			connections++
+			if connections == len(coordinates)-1 {
+				x1, x2 = coord1.x, coord2.x
+				break
+			}
+		}
+	}
+	fmt.Println(x1, x2)
+	return x1 * x2
+}
+
 func newUnionFind(coordinates []*CoordinatesD08) UnionFindD08 {
 	unionFind := UnionFindD08{
 		parent: make(map[*CoordinatesD08]*CoordinatesD08),
