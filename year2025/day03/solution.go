@@ -2,16 +2,15 @@ package day03
 
 import (
 	"bufio"
-	"log"
 	"os"
 	"strconv"
 	"strings"
 )
 
-func Part1(filename string) int64 {
+func Part1(filename string) (int64, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 	defer file.Close()
 
@@ -21,17 +20,17 @@ func Part1(filename string) int64 {
 		line := scanner.Text()
 		joltage, err := getLargestJoltage(line, 2)
 		if err != nil {
-			log.Fatal(err)
+			return 0, err
 		}
 		totalJoltage += joltage
 	}
-	return totalJoltage
+	return totalJoltage, nil
 }
 
-func Part2(filename string) int64 {
+func Part2(filename string) (int64, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 	defer file.Close()
 
@@ -41,11 +40,11 @@ func Part2(filename string) int64 {
 		line := scanner.Text()
 		joltage, err := getLargestJoltage(line, 12)
 		if err != nil {
-			log.Fatal(err)
+			return 0, err
 		}
 		totalJoltage += joltage
 	}
-	return totalJoltage
+	return totalJoltage, nil
 }
 
 func getLargestJoltage(bank string, digits int) (joltage int64, err error) {

@@ -3,7 +3,6 @@ package day05
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"sort"
 	"strconv"
@@ -15,10 +14,10 @@ type Range struct {
 	upper int64
 }
 
-func Part1(filename string) int {
+func Part1(filename string) (int, error) {
 	ranges, ids, err := parseFile(filename)
 	if err != nil {
-		log.Fatalf("failed to parse fresh range and ids: %s", err)
+		return 0, err
 	}
 
 	freshId := func(ranges []Range, id int64) bool {
@@ -36,13 +35,13 @@ func Part1(filename string) int {
 			freshIds++
 		}
 	}
-	return freshIds
+	return freshIds, nil
 }
 
-func Part2(filename string) int64 {
+func Part2(filename string) (int64, error) {
 	ranges, _, err := parseFile(filename)
 	if err != nil {
-		log.Fatalf("failed to parse fresh range and ids: %s", err)
+		return 0, err
 	}
 	sort.Slice(ranges, func(i int, j int) bool {
 		return ranges[i].lower < ranges[j].lower
@@ -59,7 +58,7 @@ func Part2(filename string) int64 {
 			currentHighestupper = ranges[i].upper
 		}
 	}
-	return freshIds
+	return freshIds, nil
 }
 
 func parseFile(filename string) (ranges []Range, ids []int64, err error) {

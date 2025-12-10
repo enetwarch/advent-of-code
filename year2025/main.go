@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"time"
 	"year2025/day01"
 	"year2025/day02"
@@ -15,38 +16,44 @@ import (
 )
 
 func main() {
-	printAnswer(1, 1, day01.Part1, "./day01/input.txt")
-	printAnswer(1, 2, day01.Part2, "./day01/input.txt")
+	solve(1, 1, day01.Part1)
+	solve(1, 2, day01.Part2)
 
-	printAnswer(2, 1, day02.Part1, "./day02/input.txt")
-	printAnswer(2, 2, day02.Part2, "./day02/input.txt")
+	solve(2, 1, day02.Part1)
+	solve(2, 2, day02.Part2)
 
-	printAnswer(3, 1, day03.Part1, "./day03/input.txt")
-	printAnswer(3, 2, day03.Part2, "./day03/input.txt")
+	solve(3, 1, day03.Part1)
+	solve(3, 2, day03.Part2)
 
-	printAnswer(4, 1, day04.Part1, "./day04/input.txt")
-	printAnswer(4, 2, day04.Part2, "./day04/input.txt")
+	solve(4, 1, day04.Part1)
+	solve(4, 2, day04.Part2)
 
-	printAnswer(5, 1, day05.Part1, "./day05/input.txt")
-	printAnswer(5, 2, day05.Part2, "./day05/input.txt")
+	solve(5, 1, day05.Part1)
+	solve(5, 2, day05.Part2)
 
-	printAnswer(6, 1, day06.Part1, "./day06/input.txt")
-	printAnswer(6, 2, day06.Part2, "./day06/input.txt")
+	solve(6, 1, day06.Part1)
+	solve(6, 2, day06.Part2)
 
-	printAnswer(7, 1, day07.Part1, "./day07/input.txt")
-	printAnswer(7, 2, day07.Part2, "./day07/input.txt")
+	solve(7, 1, day07.Part1)
+	solve(7, 2, day07.Part2)
 
-	printAnswer(8, 1, day08.Part1, "./day08/input.txt")
-	printAnswer(8, 2, day08.Part2, "./day08/input.txt")
+	solve(8, 1, day08.Part1)
+	solve(8, 2, day08.Part2)
 
-	printAnswer(9, 1, day09.Part1, "./day09/input.txt")
-	printAnswer(9, 2, day09.Part2, "./day09/input.txt")
+	solve(9, 1, day09.Part1)
+	solve(9, 2, day09.Part2)
 }
 
-func printAnswer[T any](day, part int, solver func(string) T, filename string) {
-	start := time.Now()
-	answer := solver(filename)
-	elapsed := time.Since(start)
+func solve[T any](day, part int, solver func(string) (T, error)) {
+	filename := fmt.Sprintf("./day%02d/input.txt", day)
+	startingTime := time.Now()
+	problemAnswer, err := solver(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	elapsedTime := time.Since(startingTime)
 
-	fmt.Printf("Year 2025 Day %d Part %d: %v (took %s)\n", day, part, answer, elapsed)
+	label := fmt.Sprintf("Year 2025 Day %d Part %d", day, part)
+	value := fmt.Sprintf("%v (took %s)", problemAnswer, elapsedTime)
+	fmt.Printf("%s: %s\n", label, value)
 }

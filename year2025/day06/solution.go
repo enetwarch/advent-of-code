@@ -3,7 +3,6 @@ package day06
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -15,10 +14,10 @@ type Homework struct {
 	operation rune
 }
 
-func Part1(filename string) int {
+func Part1(filename string) (int, error) {
 	homeworks, err := parseFileHorizontally(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 
 	total := 0
@@ -26,13 +25,13 @@ func Part1(filename string) int {
 		answer := answerHomework(homework)
 		total += answer
 	}
-	return total
+	return total, nil
 }
 
-func Part2(filename string) int {
+func Part2(filename string) (int, error) {
 	homeworks, err := parseFileVertically(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 
 	total := 0
@@ -40,7 +39,7 @@ func Part2(filename string) int {
 		answer := answerHomework(homeworks[i])
 		total += answer
 	}
-	return total
+	return total, nil
 }
 
 func answerHomework(homework Homework) int {

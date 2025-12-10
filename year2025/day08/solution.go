@@ -3,7 +3,6 @@ package day08
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"math"
 	"os"
 	"sort"
@@ -28,10 +27,10 @@ type UnionFind struct {
 	size   map[*Coordinates]int
 }
 
-func Part1(filename string) int {
+func Part1(filename string) (int, error) {
 	coordinates, err := parseFile(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 
 	distances := calculateDistances(coordinates)
@@ -62,13 +61,13 @@ func Part1(filename string) int {
 	for i := 1; i < 3 && i < len(sizes); i++ {
 		answer *= sizes[i]
 	}
-	return answer
+	return answer, nil
 }
 
-func Part2(filename string) int {
+func Part2(filename string) (int, error) {
 	coordinates, err := parseFile(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 
 	distances := calculateDistances(coordinates)
@@ -92,17 +91,17 @@ func Part2(filename string) int {
 			}
 		}
 	}
-	return x1 * x2
+	return x1 * x2, nil
 }
 
-func newUnionFind(coordinates []Coordinates) UnionFind {
+func newUnionFind(coordinates []*Coordinates) UnionFind {
 	unionFind := UnionFind{
 		parent: make(map[*Coordinates]*Coordinates),
 		size:   make(map[*Coordinates]int),
 	}
 	for _, coordinate := range coordinates {
-		unionFind.parent[&coordinate] = &coordinate
-		unionFind.size[&coordinate] = 1
+		unionFind.parent[coordinate] = coordinate
+		unionFind.size[coordinate] = 1
 	}
 	return unionFind
 }
@@ -132,7 +131,7 @@ func (unionFind *UnionFind) union(coord1, coord2 *Coordinates) {
 	}
 }
 
-func calculateDistances(coordinates []Coordinates) []Distance {
+func calculateDistances(coordinates []*Coordinates) []Distance {
 	// Does not return duplicate coordinates like {A, B}, {B, A}
 	distances := []Distance{}
 	for i := 0; i < len(coordinates); i++ {
@@ -141,8 +140,8 @@ func calculateDistances(coordinates []Coordinates) []Distance {
 			coords2 := coordinates[j]
 			if coords1 != coords2 {
 				distances = append(distances, Distance{
-					coordinates1: &coords1,
-					coordinates2: &coords2,
+					coordinates1: coords1,
+					coordinates2: coords2,
 					distance: math.Sqrt(
 						math.Pow(float64(coords1.x-coords2.x), 2) +
 							math.Pow(float64(coords1.y-coords2.y), 2) +
@@ -155,14 +154,14 @@ func calculateDistances(coordinates []Coordinates) []Distance {
 	return distances
 }
 
-func parseFile(filename string) ([]Coordinates, error) {
+func parseFile(filename string) ([]*Coordinates, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
 
-	coordinates := []Coordinates{}
+	coordinates := []*Coordinates{}
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
@@ -181,7 +180,7 @@ func parseFile(filename string) ([]Coordinates, error) {
 				intCoords[i] = intCoord
 			}
 
-			coordinates = append(coordinates, Coordinates{
+			coordinates = append(coordinates, &Coordinates{
 				x: intCoords[0], y: intCoords[1], z: intCoords[2],
 			})
 		}

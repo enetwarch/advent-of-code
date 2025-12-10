@@ -3,16 +3,15 @@ package day01
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"strings"
 )
 
-func Part1(filename string) int {
+func Part1(filename string) (int, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 	defer file.Close()
 
@@ -27,7 +26,7 @@ func Part1(filename string) int {
 
 		rotation, degree, err := processLine(line)
 		if err != nil {
-			log.Fatal(err)
+			return 0, err
 		}
 
 		newDial, _ := rotateDial(rotation, dial, degree)
@@ -36,14 +35,13 @@ func Part1(filename string) int {
 			password++
 		}
 	}
-
-	return password
+	return password, nil
 }
 
-func Part2(filename string) int {
+func Part2(filename string) (int, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 	defer file.Close()
 
@@ -59,7 +57,7 @@ func Part2(filename string) int {
 
 		rotation, degree, err := processLine(line)
 		if err != nil {
-			log.Fatal(err)
+			return 0, err
 		}
 
 		new, passes := rotateDial(rotation, dial, degree)
@@ -69,12 +67,12 @@ func Part2(filename string) int {
 			password++
 		}
 	}
-	return password
+	return password, nil
 }
 
 func processLine(line string) (rotation rune, degree int, err error) {
 	if len(line) <= 1 {
-		return 0, 0, fmt.Errorf("line is too short")
+		return 0, 0, fmt.Errorf("line is too short: %s", line)
 	}
 
 	rotation = rune(line[0])

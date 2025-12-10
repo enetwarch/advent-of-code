@@ -2,7 +2,6 @@ package day04
 
 import (
 	"bufio"
-	"log"
 	"os"
 )
 
@@ -11,20 +10,20 @@ type Index struct {
 	j int
 }
 
-func Part1(filename string) int {
+func Part1(filename string) (int, error) {
 	grid, err := parseToiletPaperGrid(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 
 	accessibleRolls, _ := accessToiletPaperGrid(grid)
-	return accessibleRolls
+	return accessibleRolls, nil
 }
 
-func Part2(filename string) int {
+func Part2(filename string) (int, error) {
 	grid, err := parseToiletPaperGrid(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 
 	cleanedRolls := 0
@@ -37,7 +36,7 @@ func Part2(filename string) int {
 		cleanToiletPaperGrid(grid, cleaned)
 		cleanedRolls += accessed
 	}
-	return cleanedRolls
+	return cleanedRolls, nil
 }
 
 func accessToiletPaperGrid(grid [][]rune) (accessed int, cleaned []Index) {

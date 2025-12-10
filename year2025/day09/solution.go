@@ -3,7 +3,6 @@ package day09
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"sort"
 	"strconv"
@@ -21,10 +20,10 @@ type PointPair struct {
 	area   int
 }
 
-func Part1(filename string) int {
+func Part1(filename string) (int, error) {
 	points, err := parseFile(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 
 	largestArea := 0
@@ -36,13 +35,13 @@ func Part1(filename string) int {
 			}
 		}
 	}
-	return largestArea
+	return largestArea, nil
 }
 
-func Part2(filename string) int {
+func Part2(filename string) (int, error) {
 	points, err := parseFile(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 
 	rectangles := []*PointPair{}
@@ -64,10 +63,10 @@ func Part2(filename string) int {
 		rxMin, rxMax := getMinMax(rectangle.first.x, rectangle.second.x)
 		ryMin, ryMax := getMinMax(rectangle.first.y, rectangle.second.y)
 		if isRectangleInsidePolygon(points, rxMin, rxMax, ryMin, ryMax) {
-			return rectangle.area
+			return rectangle.area, nil
 		}
 	}
-	return 0 // Should never happen
+	return 0, fmt.Errorf("no valid rectangles") // Should never happen
 }
 
 func parseFile(filename string) ([]*Point, error) {

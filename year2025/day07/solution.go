@@ -3,35 +3,34 @@ package day07
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 )
 
-func Part1(filename string) int {
+func Part1(filename string) (int, error) {
 	manifold, err := parseTachyonManifold(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 
 	splits, _, err := calculateSplitTimelines(manifold)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
-	return splits
+	return splits, nil
 }
 
-func Part2(filename string) int {
+func Part2(filename string) (int, error) {
 	manifold, err := parseTachyonManifold(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 
 	_, timelines, err := calculateSplitTimelines(manifold)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
-	return timelines
+	return timelines, nil
 }
 
 func calculateSplitTimelines(manifold []string) (splits, timelines int, err error) {

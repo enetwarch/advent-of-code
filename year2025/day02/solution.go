@@ -3,7 +3,6 @@ package day02
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -14,10 +13,10 @@ type Range struct {
 	upper int64
 }
 
-func Part1(filename string) int64 {
+func Part1(filename string) (int64, error) {
 	ranges, err := parseFile(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 
 	invalid := func(id int64) bool {
@@ -35,13 +34,13 @@ func Part1(filename string) int64 {
 			}
 		}
 	}
-	return answer
+	return answer, nil
 }
 
-func Part2(filename string) int64 {
+func Part2(filename string) (int64, error) {
 	ranges, err := parseFile(filename)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 
 	invalid := func(id int64) bool {
@@ -74,13 +73,13 @@ func Part2(filename string) int64 {
 			}
 		}
 	}
-	return answer
+	return answer, nil
 }
 
 func parseFile(filename string) (ranges []Range, err error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		return nil, fmt.Errorf("failed to open file: %s", err)
+		return nil, err
 	}
 	defer file.Close()
 
