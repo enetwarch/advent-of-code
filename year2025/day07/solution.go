@@ -1,4 +1,4 @@
-package soln
+package day07
 
 import (
 	"bufio"
@@ -8,38 +8,33 @@ import (
 	"strings"
 )
 
-func Y2025D07P1(filename string) int {
+func Part1(filename string) int {
 	manifold, err := parseTachyonManifold(filename)
 	if err != nil {
-		log.Fatalf("failed to parse tachyon manifold: %s", err)
+		log.Fatal(err)
 	}
 
-	splits, _, err := calculateBeamSplitTimelines(manifold)
+	splits, _, err := calculateSplitTimelines(manifold)
 	if err != nil {
-		log.Fatalf("failed to calculate beam splits: %s", err)
+		log.Fatal(err)
 	}
-
 	return splits
 }
 
-func Y2025D07P2(filename string) int {
+func Part2(filename string) int {
 	manifold, err := parseTachyonManifold(filename)
 	if err != nil {
-		log.Fatalf("failed to parse tachyon manifold: %s", err)
+		log.Fatal(err)
 	}
 
-	_, timelines, err := calculateBeamSplitTimelines(manifold)
+	_, timelines, err := calculateSplitTimelines(manifold)
 	if err != nil {
-		log.Fatalf("failed to calculate beam timelines: %s", err)
+		log.Fatal(err)
 	}
-
 	return timelines
 }
 
-func calculateBeamSplitTimelines(manifold []string) (splits int, timelines int, err error) {
-	splits = 0
-	timelines = 0
-
+func calculateSplitTimelines(manifold []string) (splits, timelines int, err error) {
 	beamIndices := map[int]int{} // Hashmap
 	for i, v := range manifold[0] {
 		if v == 'S' {
@@ -48,7 +43,6 @@ func calculateBeamSplitTimelines(manifold []string) (splits int, timelines int, 
 			break
 		}
 	}
-
 	if len(beamIndices) != 1 {
 		return 0, 0, fmt.Errorf("no beam starting point")
 	}
@@ -64,7 +58,6 @@ func calculateBeamSplitTimelines(manifold []string) (splits int, timelines int, 
 			}
 		}
 	}
-
 	return splits, timelines, nil
 }
 
@@ -88,6 +81,5 @@ func parseTachyonManifold(filename string) (manifold []string, err error) {
 			return nil, fmt.Errorf("invalid manifold")
 		}
 	}
-
 	return manifold, nil
 }

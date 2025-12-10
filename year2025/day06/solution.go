@@ -1,4 +1,4 @@
-package soln
+package day06
 
 import (
 	"bufio"
@@ -11,14 +11,14 @@ import (
 )
 
 type Homework struct {
-	Numbers   []int
-	Operation rune
+	numbers   []int
+	operation rune
 }
 
-func Y2025D06P1(filename string) int {
-	homeworks, err := parseMathHomeworkNormally(filename)
+func Part1(filename string) int {
+	homeworks, err := parseFileHorizontally(filename)
 	if err != nil {
-		log.Fatalf("failed to parse math homework: %s", err)
+		log.Fatal(err)
 	}
 
 	total := 0
@@ -29,10 +29,10 @@ func Y2025D06P1(filename string) int {
 	return total
 }
 
-func Y2025D06P2(filename string) int {
-	homeworks, err := parseMathHomeworkVertically(filename)
+func Part2(filename string) int {
+	homeworks, err := parseFileVertically(filename)
 	if err != nil {
-		log.Fatalf("failed to parse math homework: %s", err)
+		log.Fatal(err)
 	}
 
 	total := 0
@@ -44,19 +44,19 @@ func Y2025D06P2(filename string) int {
 }
 
 func answerHomework(homework Homework) int {
-	answer := homework.Numbers[0]
-	for i := 1; i < len(homework.Numbers); i++ {
-		switch homework.Operation {
+	answer := homework.numbers[0]
+	for i := 1; i < len(homework.numbers); i++ {
+		switch homework.operation {
 		case '+':
-			answer += homework.Numbers[i]
+			answer += homework.numbers[i]
 		case '*':
-			answer *= homework.Numbers[i]
+			answer *= homework.numbers[i]
 		}
 	}
 	return answer
 }
 
-func parseMathHomeworkNormally(filename string) (homeworks []Homework, err error) {
+func parseFileHorizontally(filename string) (homeworks []Homework, err error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -71,7 +71,6 @@ func parseMathHomeworkNormally(filename string) (homeworks []Homework, err error
 		if err != nil {
 			return nil, err
 		}
-
 		homeworks = append(homeworks, Homework{[]int{number}, 0})
 	}
 
@@ -83,19 +82,18 @@ func parseMathHomeworkNormally(filename string) (homeworks []Homework, err error
 				if err != nil {
 					return nil, err
 				}
-				homeworks[i].Numbers = append(homeworks[i].Numbers, number)
+				homeworks[i].numbers = append(homeworks[i].numbers, number)
 			}
 		} else {
 			for i, v := range strings.Fields(line) {
-				homeworks[i].Operation = rune(strings.TrimSpace(v)[0])
+				homeworks[i].operation = rune(strings.TrimSpace(v)[0])
 			}
 		}
 	}
-
 	return homeworks, nil
 }
 
-func parseMathHomeworkVertically(filename string) (homeworks []Homework, err error) {
+func parseFileVertically(filename string) (homeworks []Homework, err error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -125,16 +123,15 @@ func parseMathHomeworkVertically(filename string) (homeworks []Homework, err err
 			if unicode.IsDigit(char) {
 				number = (number * 10) + int(char-'0')
 			} else if char == '+' || char == '*' {
-				homeworks[hIndex].Operation = char
+				homeworks[hIndex].operation = char
 			}
 		}
 
 		if number == 0 {
 			hIndex++
 		} else {
-			homeworks[hIndex].Numbers = append(homeworks[hIndex].Numbers, number)
+			homeworks[hIndex].numbers = append(homeworks[hIndex].numbers, number)
 		}
 	}
-
 	return homeworks, nil
 }

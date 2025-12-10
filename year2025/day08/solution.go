@@ -1,4 +1,4 @@
-package soln
+package day08
 
 import (
 	"bufio"
@@ -11,36 +11,36 @@ import (
 	"strings"
 )
 
-type CoordinatesD08 struct {
+type Coordinates struct {
 	x int
 	y int
 	z int
 }
 
-type DistanceD08 struct {
-	coordinates1 *CoordinatesD08
-	coordinates2 *CoordinatesD08
+type Distance struct {
+	coordinates1 *Coordinates
+	coordinates2 *Coordinates
 	distance     float64
 }
 
-type UnionFindD08 struct {
-	parent map[*CoordinatesD08]*CoordinatesD08
-	size   map[*CoordinatesD08]int
+type UnionFind struct {
+	parent map[*Coordinates]*Coordinates
+	size   map[*Coordinates]int
 }
 
-func Y2025D08P1(filename string) int {
-	coordinates, err := parseD08(filename)
+func Part1(filename string) int {
+	coordinates, err := parseFile(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	distances := distancesD08(coordinates)
+	distances := calculateDistances(coordinates)
 	sort.Slice(distances, func(i int, j int) bool {
 		// This will sort distances by ascending distance.
 		return distances[i].distance < distances[j].distance
 	})
 
-	unionFind := newUnionFindD08(coordinates)
+	unionFind := newUnionFind(coordinates)
 	for i := 0; i < len(coordinates); i++ {
 		coord1 := distances[i].coordinates1
 		coord2 := distances[i].coordinates2
@@ -65,19 +65,19 @@ func Y2025D08P1(filename string) int {
 	return answer
 }
 
-func Y2025D08P2(filename string) int {
-	coordinates, err := parseD08(filename)
+func Part2(filename string) int {
+	coordinates, err := parseFile(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	distances := distancesD08(coordinates)
+	distances := calculateDistances(coordinates)
 	sort.Slice(distances, func(i int, j int) bool {
 		// This will sort distances by ascending distance.
 		return distances[i].distance < distances[j].distance
 	})
 
-	unionFind := newUnionFindD08(coordinates)
+	unionFind := newUnionFind(coordinates)
 	connections := 0
 	var x1, x2 int
 	for _, distance := range distances {
@@ -95,19 +95,19 @@ func Y2025D08P2(filename string) int {
 	return x1 * x2
 }
 
-func newUnionFindD08(coordinates []*CoordinatesD08) UnionFindD08 {
-	unionFind := UnionFindD08{
-		parent: make(map[*CoordinatesD08]*CoordinatesD08),
-		size:   make(map[*CoordinatesD08]int),
+func newUnionFind(coordinates []Coordinates) UnionFind {
+	unionFind := UnionFind{
+		parent: make(map[*Coordinates]*Coordinates),
+		size:   make(map[*Coordinates]int),
 	}
 	for _, coordinate := range coordinates {
-		unionFind.parent[coordinate] = coordinate
-		unionFind.size[coordinate] = 1
+		unionFind.parent[&coordinate] = &coordinate
+		unionFind.size[&coordinate] = 1
 	}
 	return unionFind
 }
 
-func (unionFind *UnionFindD08) find(child *CoordinatesD08) *CoordinatesD08 {
+func (unionFind *UnionFind) find(child *Coordinates) *Coordinates {
 	parent := unionFind.parent[child]
 	if parent == nil {
 		unionFind.parent[child] = child
@@ -122,7 +122,7 @@ func (unionFind *UnionFindD08) find(child *CoordinatesD08) *CoordinatesD08 {
 	return parent
 }
 
-func (unionFind *UnionFindD08) union(coord1 *CoordinatesD08, coord2 *CoordinatesD08) {
+func (unionFind *UnionFind) union(coord1, coord2 *Coordinates) {
 	parent1 := unionFind.find(coord1)
 	parent2 := unionFind.find(coord2)
 	if parent1 != parent2 {
@@ -132,17 +132,17 @@ func (unionFind *UnionFindD08) union(coord1 *CoordinatesD08, coord2 *Coordinates
 	}
 }
 
-func distancesD08(coordinates []*CoordinatesD08) []*DistanceD08 {
+func calculateDistances(coordinates []Coordinates) []Distance {
 	// Does not return duplicate coordinates like {A, B}, {B, A}
-	distances := []*DistanceD08{}
+	distances := []Distance{}
 	for i := 0; i < len(coordinates); i++ {
 		for j := i + 1; j < len(coordinates); j++ {
 			coords1 := coordinates[i]
 			coords2 := coordinates[j]
 			if coords1 != coords2 {
-				distances = append(distances, &DistanceD08{
-					coordinates1: coords1,
-					coordinates2: coords2,
+				distances = append(distances, Distance{
+					coordinates1: &coords1,
+					coordinates2: &coords2,
 					distance: math.Sqrt(
 						math.Pow(float64(coords1.x-coords2.x), 2) +
 							math.Pow(float64(coords1.y-coords2.y), 2) +
@@ -155,14 +155,14 @@ func distancesD08(coordinates []*CoordinatesD08) []*DistanceD08 {
 	return distances
 }
 
-func parseD08(filename string) ([]*CoordinatesD08, error) {
+func parseFile(filename string) ([]Coordinates, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
 
-	coordinates := []*CoordinatesD08{}
+	coordinates := []Coordinates{}
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
@@ -181,10 +181,8 @@ func parseD08(filename string) ([]*CoordinatesD08, error) {
 				intCoords[i] = intCoord
 			}
 
-			coordinates = append(coordinates, &CoordinatesD08{
-				x: intCoords[0],
-				y: intCoords[1],
-				z: intCoords[2],
+			coordinates = append(coordinates, Coordinates{
+				x: intCoords[0], y: intCoords[1], z: intCoords[2],
 			})
 		}
 	}

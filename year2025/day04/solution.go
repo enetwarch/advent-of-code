@@ -1,4 +1,4 @@
-package soln
+package day04
 
 import (
 	"bufio"
@@ -6,25 +6,25 @@ import (
 	"os"
 )
 
-type Coordinates struct {
-	I int
-	J int
+type Index struct {
+	i int
+	j int
 }
 
-func Y2025D04P1(filename string) int {
+func Part1(filename string) int {
 	grid, err := parseToiletPaperGrid(filename)
 	if err != nil {
-		log.Fatalf("failed to parse toiler paper grid: %s", err)
+		log.Fatal(err)
 	}
 
 	accessibleRolls, _ := accessToiletPaperGrid(grid)
 	return accessibleRolls
 }
 
-func Y2025D04P2(filename string) int {
+func Part2(filename string) int {
 	grid, err := parseToiletPaperGrid(filename)
 	if err != nil {
-		log.Fatalf("failed to parse toiler paper grid: %s", err)
+		log.Fatal(err)
 	}
 
 	cleanedRolls := 0
@@ -37,27 +37,24 @@ func Y2025D04P2(filename string) int {
 		cleanToiletPaperGrid(grid, cleaned)
 		cleanedRolls += accessed
 	}
-
 	return cleanedRolls
 }
 
-func accessToiletPaperGrid(grid [][]rune) (accessed int, cleaned []Coordinates) {
+func accessToiletPaperGrid(grid [][]rune) (accessed int, cleaned []Index) {
 	for i := 0; i < len(grid); i++ {
 		for j := 0; j < len(grid[i]); j++ {
 			if grid[i][j] == '@' && isAccessibleByForklift(grid, i, j) {
-				cleaned = append(cleaned, Coordinates{i, j})
+				cleaned = append(cleaned, Index{i, j})
 				accessed++
 			}
 		}
 	}
-
 	return accessed, cleaned
 }
 
-func cleanToiletPaperGrid(grid [][]rune, cleaned []Coordinates) {
+func cleanToiletPaperGrid(grid [][]rune, cleaned []Index) {
 	for _, v := range cleaned {
-		i, j := v.I, v.J
-		grid[i][j] = '.'
+		grid[v.i][v.j] = '.'
 	}
 }
 
@@ -79,7 +76,6 @@ func isAccessibleByForklift(grid [][]rune, i int, j int) bool {
 			count++
 		}
 	}
-
 	return count < 4
 }
 
@@ -87,7 +83,6 @@ func accessGridElement(grid [][]rune, i int, j int) rune {
 	if i < 0 || i >= len(grid) || j < 0 || j >= len(grid[i]) {
 		return 0
 	}
-
 	return grid[i][j]
 }
 
@@ -103,6 +98,5 @@ func parseToiletPaperGrid(filename string) (grid [][]rune, err error) {
 		line := scanner.Text()
 		grid = append(grid, []rune(line))
 	}
-
 	return grid, nil
 }

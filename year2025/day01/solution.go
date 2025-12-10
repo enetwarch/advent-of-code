@@ -1,8 +1,7 @@
-package soln
+package day01
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -10,17 +9,16 @@ import (
 	"strings"
 )
 
-func Y2025D01P1(filename string) int {
+func Part1(filename string) int {
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatalf("failed to open file: %s", err)
+		log.Fatal(err)
 	}
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	password := 0
 	dial := 50
-
 	for scanner.Scan() {
 		line := scanner.Text()
 		if len(line) <= 1 {
@@ -29,11 +27,11 @@ func Y2025D01P1(filename string) int {
 
 		rotation, degree, err := processLine(line)
 		if err != nil {
-			log.Fatalf("failed to process line: %s", err)
+			log.Fatal(err)
 		}
 
-		new, _ := rotateDial(dial, rotation, degree)
-		dial = new
+		newDial, _ := rotateDial(rotation, dial, degree)
+		dial = newDial
 		if dial == 0 {
 			password++
 		}
@@ -42,10 +40,10 @@ func Y2025D01P1(filename string) int {
 	return password
 }
 
-func Y2025D01P2(filename string) int {
+func Part2(filename string) int {
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatalf("failed to open file: %s", err)
+		log.Fatal(err)
 	}
 	defer file.Close()
 
@@ -61,59 +59,53 @@ func Y2025D01P2(filename string) int {
 
 		rotation, degree, err := processLine(line)
 		if err != nil {
-			log.Fatalf("failed to process line: %s", err)
+			log.Fatal(err)
 		}
 
-		new, passes := rotateDial(dial, rotation, degree)
+		new, passes := rotateDial(rotation, dial, degree)
 		dial = new
 		password += passes
 		if dial == 0 {
 			password++
 		}
 	}
-
 	return password
 }
 
 func processLine(line string) (rotation rune, degree int, err error) {
 	if len(line) <= 1 {
-		return 0, 0, errors.New("line is too short")
+		return 0, 0, fmt.Errorf("line is too short")
 	}
 
 	rotation = rune(line[0])
 	if !(rotation == 'L' || rotation == 'R') {
-		return 0, 0, fmt.Errorf("unknown rotation rune %c", rotation)
+		return 0, 0, fmt.Errorf("unknown rotation rune: %c", rotation)
 	}
 
 	degree, err = strconv.Atoi(strings.TrimSpace(line[1:]))
 	if err != nil {
-		return 0, 0, fmt.Errorf("invalid degree %w", err)
+		return 0, 0, fmt.Errorf("invalid degree: %s", line)
 	}
 
 	return rotation, degree, err
 }
 
-func rotateDial(dial int, rotation rune, degree int) (new int, passes int) {
+func rotateDial(rotation rune, dial, degree int) (newDial int, zeroPasses int) {
 	if rotation == 'L' {
-		new = (dial - degree) % 100
-		if new < 0 {
-			new += 100
+		newDial = (dial - degree) % 100
+		if newDial < 0 {
+			newDial += 100
 		}
-
 		if dial == 0 {
-			passes = -(dial - degree) / 100
+			zeroPasses = -(dial - degree) / 100
 		} else {
-			passes = -(dial - degree - 99) / 100
+			zeroPasses = -(dial - degree - 99) / 100
 		}
-		return new, passes
+		return newDial, zeroPasses
+	} else if rotation == 'R' {
+		newDial = (dial + degree) % 100
+		zeroPasses = (dial + degree - 1) / 100
+		return newDial, zeroPasses
 	}
-
-	if rotation == 'R' {
-		new = (dial + degree) % 100
-		passes = (dial + degree - 1) / 100
-
-		return new, passes
-	}
-
-	return dial, 0
+	return dial, 0 // Should never land in this line
 }

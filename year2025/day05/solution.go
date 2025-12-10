@@ -1,4 +1,4 @@
-package soln
+package day05
 
 import (
 	"bufio"
@@ -10,63 +10,59 @@ import (
 	"strings"
 )
 
-func Y2025D05P1(filename string) int {
-	ranges, ids, err := parseFreshRangeAndIDs(filename)
+type Range struct {
+	lower int64
+	upper int64
+}
+
+func Part1(filename string) int {
+	ranges, ids, err := parseFile(filename)
 	if err != nil {
 		log.Fatalf("failed to parse fresh range and ids: %s", err)
+	}
+
+	freshId := func(ranges []Range, id int64) bool {
+		for _, v := range ranges {
+			if id >= v.lower && id <= v.upper {
+				return true
+			}
+		}
+		return false
 	}
 
 	freshIds := 0
 	for _, id := range ids {
-		if isFreshId(ranges, id) {
+		if freshId(ranges, id) {
 			freshIds++
 		}
 	}
-
 	return freshIds
 }
 
-func Y2025D05P2(filename string) int64 {
-	ranges, _, err := parseFreshRangeAndIDs(filename)
+func Part2(filename string) int64 {
+	ranges, _, err := parseFile(filename)
 	if err != nil {
 		log.Fatalf("failed to parse fresh range and ids: %s", err)
 	}
-
-	return countFreshIds(ranges)
-}
-
-func isFreshId(ranges []Range, id int64) bool {
-	for _, v := range ranges {
-		if id >= v.Lower && id <= v.Upper {
-			return true
-		}
-	}
-
-	return false
-}
-
-func countFreshIds(ranges []Range) int64 {
 	sort.Slice(ranges, func(i int, j int) bool {
-		return ranges[i].Lower < ranges[j].Lower
+		return ranges[i].lower < ranges[j].lower
 	})
 
 	var freshIds int64 = 0
-	var currentHighestUpper int64 = 0
-
+	var currentHighestupper int64 = 0
 	for i := 0; i < len(ranges); i++ {
-		if ranges[i].Lower > currentHighestUpper {
-			freshIds += ranges[i].Upper - ranges[i].Lower + 1
-			currentHighestUpper = ranges[i].Upper
-		} else if ranges[i].Upper > currentHighestUpper {
-			freshIds += ranges[i].Upper - currentHighestUpper
-			currentHighestUpper = ranges[i].Upper
+		if ranges[i].lower > currentHighestupper {
+			freshIds += ranges[i].upper - ranges[i].lower + 1
+			currentHighestupper = ranges[i].upper
+		} else if ranges[i].upper > currentHighestupper {
+			freshIds += ranges[i].upper - currentHighestupper
+			currentHighestupper = ranges[i].upper
 		}
 	}
-
 	return freshIds
 }
 
-func parseFreshRangeAndIDs(filename string) (ranges []Range, ids []int64, err error) {
+func parseFile(filename string) (ranges []Range, ids []int64, err error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, nil, err
@@ -111,6 +107,5 @@ func parseFreshRangeAndIDs(filename string) (ranges []Range, ids []int64, err er
 
 		ids = append(ids, id)
 	}
-
 	return ranges, ids, nil
 }

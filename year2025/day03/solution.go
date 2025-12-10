@@ -1,4 +1,4 @@
-package soln
+package day03
 
 import (
 	"bufio"
@@ -8,55 +8,48 @@ import (
 	"strings"
 )
 
-func Y2025D03P1(filename string) int64 {
+func Part1(filename string) int64 {
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatalf("failed to open file: %s", err)
+		log.Fatal(err)
 	}
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	var totalJoltage int64 = 0
-
 	for scanner.Scan() {
 		line := scanner.Text()
-
 		joltage, err := getLargestJoltage(line, 2)
 		if err != nil {
-			log.Fatalf("failed to get largest joltage: %s", err)
+			log.Fatal(err)
 		}
 		totalJoltage += joltage
 	}
-
 	return totalJoltage
 }
 
-func Y2025D03P2(filename string) int64 {
+func Part2(filename string) int64 {
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatalf("failed to open file: %s", err)
+		log.Fatal(err)
 	}
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	var totalJoltage int64 = 0
-
 	for scanner.Scan() {
 		line := scanner.Text()
-
 		joltage, err := getLargestJoltage(line, 12)
 		if err != nil {
-			log.Fatalf("failed to get largest joltage: %s", err)
+			log.Fatal(err)
 		}
 		totalJoltage += joltage
 	}
-
 	return totalJoltage
 }
 
 func getLargestJoltage(bank string, digits int) (joltage int64, err error) {
 	joltageBank := []rune(strings.Repeat("0", digits))
-
 	for _, v := range bank {
 		index, _ := findReplaceableJoltageRune(joltageBank, v)
 		if index == -1 {
@@ -73,7 +66,6 @@ func getLargestJoltage(bank string, digits int) (joltage int64, err error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return joltage, nil
 }
 
@@ -89,6 +81,5 @@ func findReplaceableJoltageRune(bank []rune, insert rune) (index int, jolt rune)
 			return i, bank[i]
 		}
 	}
-
-	return -1, '0'
+	return -1, '0' // Should never land here
 }
