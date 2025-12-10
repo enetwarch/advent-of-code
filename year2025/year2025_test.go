@@ -30,11 +30,11 @@ func TestDay01Part2(t *testing.T) {
 }
 
 func TestDay02Part1(t *testing.T) {
-	test(t, Test[int64]{day: 2, solver: day02.Part1, expected: 19128774598})
+	test(t, Test[int]{day: 2, solver: day02.Part1, expected: 19128774598})
 }
 
 func TestDay02Part2(t *testing.T) {
-	test(t, Test[int64]{day: 2, solver: day02.Part2, expected: 21932258645})
+	test(t, Test[int]{day: 2, solver: day02.Part2, expected: 21932258645})
 }
 
 func TestDay03Part1(t *testing.T) {
@@ -62,11 +62,11 @@ func TestDay05Part2(t *testing.T) {
 }
 
 func TestDay06Part1(t *testing.T) {
-	test(t, Test[int]{day: 6, solver: day06.Part1, expected: 4076006202939})
+	test(t, Test[int64]{day: 6, solver: day06.Part1, expected: 4076006202939})
 }
 
 func TestDay06Part2(t *testing.T) {
-	test(t, Test[int]{day: 6, solver: day06.Part2, expected: 7903168391557})
+	test(t, Test[int64]{day: 6, solver: day06.Part2, expected: 7903168391557})
 }
 
 func TestDay07Part1(t *testing.T) {
@@ -74,7 +74,7 @@ func TestDay07Part1(t *testing.T) {
 }
 
 func TestDay07Part2(t *testing.T) {
-	test(t, Test[int]{day: 7, solver: day07.Part2, expected: 16937871060075})
+	test(t, Test[int64]{day: 7, solver: day07.Part2, expected: 16937871060075})
 }
 
 func TestDay08Part1(t *testing.T) {
@@ -82,15 +82,15 @@ func TestDay08Part1(t *testing.T) {
 }
 
 func TestDay08Part2(t *testing.T) {
-	test(t, Test[int]{day: 8, solver: day08.Part2, expected: 8141888143})
+	test(t, Test[int64]{day: 8, solver: day08.Part2, expected: 8141888143})
 }
 
 func TestDay09Part1(t *testing.T) {
-	test(t, Test[int]{day: 9, solver: day09.Part1, expected: 4759531084})
+	test(t, Test[int64]{day: 9, solver: day09.Part1, expected: 4759531084})
 }
 
 func TestDay09Part2(t *testing.T) {
-	test(t, Test[int]{day: 9, solver: day09.Part2, expected: 1539238860})
+	test(t, Test[int64]{day: 9, solver: day09.Part2, expected: 1539238860})
 }
 
 func test[Type comparable](t *testing.T, test Test[Type]) {

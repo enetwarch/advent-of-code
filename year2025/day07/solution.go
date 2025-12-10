@@ -20,7 +20,7 @@ func Part1(filename string) (int, error) {
 	return splits, nil
 }
 
-func Part2(filename string) (int, error) {
+func Part2(filename string) (int64, error) {
 	manifold, err := parseTachyonManifold(filename)
 	if err != nil {
 		return 0, err
@@ -33,8 +33,8 @@ func Part2(filename string) (int, error) {
 	return timelines, nil
 }
 
-func calculateSplitTimelines(manifold []string) (splits, timelines int, err error) {
-	beamIndices := map[int]int{} // Hashmap
+func calculateSplitTimelines(manifold []string) (splits int, timelines int64, err error) {
+	beamIndices := map[int]int64{} // Hashmap
 	for i, v := range manifold[0] {
 		if v == 'S' {
 			beamIndices[i] = 1

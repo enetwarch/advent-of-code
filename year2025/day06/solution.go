@@ -14,13 +14,13 @@ type Homework struct {
 	operation rune
 }
 
-func Part1(filename string) (int, error) {
+func Part1(filename string) (int64, error) {
 	homeworks, err := parseFileHorizontally(filename)
 	if err != nil {
 		return 0, err
 	}
 
-	total := 0
+	var total int64 = 0
 	for _, homework := range homeworks {
 		answer := answerHomework(homework)
 		total += answer
@@ -28,13 +28,13 @@ func Part1(filename string) (int, error) {
 	return total, nil
 }
 
-func Part2(filename string) (int, error) {
+func Part2(filename string) (int64, error) {
 	homeworks, err := parseFileVertically(filename)
 	if err != nil {
 		return 0, err
 	}
 
-	total := 0
+	var total int64 = 0
 	for i := len(homeworks) - 1; i >= 0; i-- {
 		answer := answerHomework(homeworks[i])
 		total += answer
@@ -42,14 +42,14 @@ func Part2(filename string) (int, error) {
 	return total, nil
 }
 
-func answerHomework(homework Homework) int {
-	answer := homework.numbers[0]
+func answerHomework(homework Homework) int64 {
+	var answer int64 = int64(homework.numbers[0])
 	for i := 1; i < len(homework.numbers); i++ {
 		switch homework.operation {
 		case '+':
-			answer += homework.numbers[i]
+			answer += int64(homework.numbers[i])
 		case '*':
-			answer *= homework.numbers[i]
+			answer *= int64(homework.numbers[i])
 		}
 	}
 	return answer

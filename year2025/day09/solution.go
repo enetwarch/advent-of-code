@@ -17,16 +17,16 @@ type Point struct {
 type PointPair struct {
 	first  *Point
 	second *Point
-	area   int
+	area   int64
 }
 
-func Part1(filename string) (int, error) {
+func Part1(filename string) (int64, error) {
 	points, err := parseFile(filename)
 	if err != nil {
 		return 0, err
 	}
 
-	largestArea := 0
+	var largestArea int64 = 0
 	for i := 0; i < len(points); i++ {
 		for j := i + 1; j < len(points); j++ {
 			area := calculateArea(points[i], points[j])
@@ -38,7 +38,7 @@ func Part1(filename string) (int, error) {
 	return largestArea, nil
 }
 
-func Part2(filename string) (int, error) {
+func Part2(filename string) (int64, error) {
 	points, err := parseFile(filename)
 	if err != nil {
 		return 0, err
@@ -102,7 +102,7 @@ func parseFile(filename string) ([]*Point, error) {
 	return points, nil
 }
 
-func calculateArea(point1, point2 *Point) int {
+func calculateArea(point1, point2 *Point) int64 {
 	abs := func(number int) int {
 		if number < 0 {
 			return -number
@@ -112,7 +112,7 @@ func calculateArea(point1, point2 *Point) int {
 
 	x1, x2 := point1.x, point2.x
 	y1, y2 := point1.y, point2.y
-	return int(abs(x1-x2)+1) * (abs(y1-y2) + 1)
+	return int64((abs(x1-x2) + 1) * (abs(y1-y2) + 1))
 }
 
 func getMinMax(number1, number2 int) (min, max int) {

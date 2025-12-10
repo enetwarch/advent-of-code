@@ -64,7 +64,7 @@ func Part1(filename string) (int, error) {
 	return answer, nil
 }
 
-func Part2(filename string) (int, error) {
+func Part2(filename string) (int64, error) {
 	coordinates, err := parseFile(filename)
 	if err != nil {
 		return 0, err
@@ -91,7 +91,7 @@ func Part2(filename string) (int, error) {
 			}
 		}
 	}
-	return x1 * x2, nil
+	return int64(x1 * x2), nil
 }
 
 func newUnionFind(coordinates []*Coordinates) UnionFind {

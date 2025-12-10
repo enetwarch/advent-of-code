@@ -9,24 +9,24 @@ import (
 )
 
 type Range struct {
-	lower int64
-	upper int64
+	lower int
+	upper int
 }
 
-func Part1(filename string) (int64, error) {
+func Part1(filename string) (int, error) {
 	ranges, err := parseFile(filename)
 	if err != nil {
 		return 0, err
 	}
 
-	invalid := func(id int64) bool {
-		stringifiedId := strconv.FormatInt(id, 10)
+	invalid := func(id int) bool {
+		stringifiedId := strconv.Itoa(id)
 		midIndex := len(stringifiedId) / 2
 		return (len(stringifiedId)%2 == 0 &&
 			stringifiedId[midIndex:] == stringifiedId[:midIndex])
 	}
 
-	var answer int64 = 0
+	var answer int = 0
 	for _, v := range ranges {
 		for id := v.lower; id <= v.upper; id++ {
 			if invalid(id) {
@@ -37,14 +37,14 @@ func Part1(filename string) (int64, error) {
 	return answer, nil
 }
 
-func Part2(filename string) (int64, error) {
+func Part2(filename string) (int, error) {
 	ranges, err := parseFile(filename)
 	if err != nil {
 		return 0, err
 	}
 
-	invalid := func(id int64) bool {
-		stringifiedId := strconv.FormatInt(id, 10)
+	invalid := func(id int) bool {
+		stringifiedId := strconv.Itoa(id)
 		for length := 1; length <= len(stringifiedId)/2; length++ {
 			if len(stringifiedId)%length != 0 {
 				continue
@@ -65,7 +65,7 @@ func Part2(filename string) (int64, error) {
 		return false
 	}
 
-	var answer int64 = 0
+	var answer int = 0
 	for _, v := range ranges {
 		for id := v.lower; id <= v.upper; id++ {
 			if invalid(id) {
@@ -98,12 +98,12 @@ func parseFile(filename string) (ranges []Range, err error) {
 				return nil, fmt.Errorf("failed to process ids")
 			}
 
-			lower, err := strconv.ParseInt(ids[0], 10, 64)
+			lower, err := strconv.Atoi(ids[0])
 			if err != nil {
 				return nil, fmt.Errorf("failed to process lower id: %s", err)
 			}
 
-			upper, err := strconv.ParseInt(ids[1], 10, 64)
+			upper, err := strconv.Atoi(ids[1])
 			if err != nil {
 				return nil, fmt.Errorf("failed to process upper id: %s", err)
 			}
