@@ -1,9 +1,10 @@
 package main
 
 import (
-	"2025/soln"
 	"fmt"
 	"time"
+	"year2025/day09"
+	"year2025/soln"
 )
 
 func main() {
@@ -31,8 +32,8 @@ func main() {
 	printAnswer(8, 1, soln.Y2025D08P1, "./input/08.txt")
 	printAnswer(8, 2, soln.Y2025D08P2, "./input/08.txt")
 
-	printAnswer(9, 1, soln.Y2025D09P1, "./input/09.txt")
-	printAnswer(9, 2, soln.Y2025D09P2, "./input/09.txt")
+	printAnswer(9, 1, day09.Part1, "./day09/input.txt")
+	printAnswer(9, 2, day09.Part2, "./day09/input.txt")
 }
 
 func printAnswer[T any](day, part int, solver func(string) T, filename string) {

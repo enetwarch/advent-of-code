@@ -1,4 +1,4 @@
-package soln
+package day09
 
 import (
 	"bufio"
@@ -21,7 +21,7 @@ type PointPair struct {
 	area   int
 }
 
-func Y2025D09P1(filename string) int {
+func Part1(filename string) int {
 	points, err := parseFile(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -39,7 +39,7 @@ func Y2025D09P1(filename string) int {
 	return largestArea
 }
 
-func Y2025D09P2(filename string) int {
+func Part2(filename string) int {
 	points, err := parseFile(filename)
 	if err != nil {
 		log.Fatal(err)

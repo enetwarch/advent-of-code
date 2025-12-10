@@ -1,3 +1,3 @@
-module 2025
+module year2025
 
 go 1.25.5
