@@ -13,6 +13,7 @@ import (
 	"year2025/day07"
 	"year2025/day08"
 	"year2025/day09"
+	"year2025/day10"
 )
 
 type Problem[Type comparable] struct {
@@ -48,6 +49,8 @@ func main() {
 
 	solve(Problem[int64]{day: 9, part: 1, solver: day09.Part1})
 	solve(Problem[int64]{day: 9, part: 2, solver: day09.Part2})
+
+	solve(Problem[int]{day: 10, part: 1, solver: day10.Part1})
 }
 
 func solve[Type comparable](problem Problem[Type]) {
