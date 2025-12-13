@@ -15,6 +15,7 @@ import (
 	"year2025/day09"
 	"year2025/day10"
 	"year2025/day11"
+	"year2025/day12"
 )
 
 type Test[Type comparable] struct {
@@ -105,6 +106,10 @@ func TestDay11Part1(t *testing.T) {
 
 func TestDay11Part2(t *testing.T) {
 	test(t, Test[int64]{day: 11, solver: day11.Part2, expected: 553204221431080})
+}
+
+func TestDay12Part2(t *testing.T) {
+	test(t, Test[int]{day: 12, solver: day12.Part1, expected: 544})
 }
 
 func test[Type comparable](t *testing.T, test Test[Type]) {
