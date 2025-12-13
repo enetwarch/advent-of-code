@@ -54,6 +54,7 @@ func main() {
 	solve(Problem[int]{day: 10, part: 1, solver: day10.Part1})
 
 	solve(Problem[int]{day: 11, part: 1, solver: day11.Part1})
+	solve(Problem[int64]{day: 11, part: 2, solver: day11.Part2})
 }
 
 func solve[Type comparable](problem Problem[Type]) {

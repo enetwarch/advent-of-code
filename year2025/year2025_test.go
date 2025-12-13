@@ -103,6 +103,10 @@ func TestDay11Part1(t *testing.T) {
 	test(t, Test[int]{day: 11, solver: day11.Part1, expected: 448})
 }
 
+func TestDay11Part2(t *testing.T) {
+	test(t, Test[int64]{day: 11, solver: day11.Part2, expected: 553204221431080})
+}
+
 func test[Type comparable](t *testing.T, test Test[Type]) {
 	filename := fmt.Sprintf("./day%02d/input.txt", test.day)
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
