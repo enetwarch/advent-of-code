@@ -16,7 +16,7 @@ type Machine struct {
 	joltageRequirements []int
 }
 
-func Part1(filename string) (int, error) {
+func Part1(filename string) (int32, error) {
 	machines, err := parseFile(filename)
 	if err != nil {
 		return 0, err
@@ -53,23 +53,16 @@ func Part1(filename string) (int, error) {
 			}
 		}
 	}
-	return fewestButtonPresses, nil
+	return int32(fewestButtonPresses), nil
 }
 
-func Part2(filename string) (int, error) {
+func Part2(filename string) (int32, error) {
 	machines, err := parseFile(filename)
 	if err != nil {
 		return 0, err
 	}
 
 	totalPresses := 0
-	/*
-		[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
-			[0, 0, 0, 0, 1, 1 | 3]
-			[0, 1, 0, 0, 0, 1 | 5]
-			[0, 0, 1, 1, 1, 0 | 4]
-			[1, 1, 0, 1, 0, 0 | 7]
-	*/
 	for _, machine := range machines {
 		lp := glpk.New()
 		lp.SetObjDir(glpk.ObjDir(glpk.MIN))
@@ -117,9 +110,8 @@ func Part2(filename string) (int, error) {
 		for i := 0; i < len(machine.wiringSchematics); i++ {
 			totalPresses += int(lp.MipColVal(i + 1))
 		}
-		lp.Delete()
 	}
-	return totalPresses, nil
+	return int32(totalPresses), nil
 }
 
 func parseFile(filename string) ([]Machine, error) {
