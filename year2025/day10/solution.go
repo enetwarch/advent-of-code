@@ -16,7 +16,7 @@ type Machine struct {
 	joltageRequirements []int
 }
 
-func Part1(filename string) (int32, error) {
+func Part1(filename string) (int, error) {
 	machines, err := parseFile(filename)
 	if err != nil {
 		return 0, err
@@ -53,10 +53,10 @@ func Part1(filename string) (int32, error) {
 			}
 		}
 	}
-	return int32(fewestButtonPresses), nil
+	return fewestButtonPresses, nil
 }
 
-func Part2(filename string) (int32, error) {
+func Part2(filename string) (int, error) {
 	machines, err := parseFile(filename)
 	if err != nil {
 		return 0, err
@@ -111,7 +111,7 @@ func Part2(filename string) (int32, error) {
 			totalPresses += int(lp.MipColVal(i + 1))
 		}
 	}
-	return int32(totalPresses), nil
+	return totalPresses, nil
 }
 
 func parseFile(filename string) ([]Machine, error) {

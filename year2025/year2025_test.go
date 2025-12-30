@@ -97,11 +97,11 @@ func TestDay09Part2(t *testing.T) {
 }
 
 func TestDay10Part1(t *testing.T) {
-	test(t, Test[int32]{day: 10, solver: day10.Part1, expected: 436})
+	test(t, Test[int]{day: 10, solver: day10.Part1, expected: 436})
 }
 
 func TestDay10Part2(t *testing.T) {
-	test(t, Test[int32]{day: 10, solver: day10.Part2, expected: 14999})
+	test(t, Test[int]{day: 10, solver: day10.Part2, expected: 14999})
 }
 
 func TestDay11Part1(t *testing.T) {
