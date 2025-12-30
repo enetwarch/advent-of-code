@@ -6,6 +6,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/lukpank/go-glpk/glpk"
 )
 
 type Machine struct {
@@ -52,6 +54,72 @@ func Part1(filename string) (int, error) {
 		}
 	}
 	return fewestButtonPresses, nil
+}
+
+func Part2(filename string) (int, error) {
+	machines, err := parseFile(filename)
+	if err != nil {
+		return 0, err
+	}
+
+	totalPresses := 0
+	/*
+		[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
+			[0, 0, 0, 0, 1, 1 | 3]
+			[0, 1, 0, 0, 0, 1 | 5]
+			[0, 0, 1, 1, 1, 0 | 4]
+			[1, 1, 0, 1, 0, 0 | 7]
+	*/
+	for _, machine := range machines {
+		lp := glpk.New()
+		lp.SetObjDir(glpk.ObjDir(glpk.MIN))
+		lp.AddRows(len(machine.joltageRequirements))
+		for i := 0; i < len(machine.joltageRequirements); i++ {
+			requirement := float64(machine.joltageRequirements[i])
+			lp.SetRowBnds(i+1, glpk.BndsType(glpk.FX), requirement, requirement)
+		}
+		lp.AddCols(len(machine.wiringSchematics))
+		for i := 0; i < len(machine.wiringSchematics); i++ {
+			lp.SetColBnds(i+1, glpk.BndsType(glpk.LO), 0.0, 0.0)
+			lp.SetColKind(i+1, glpk.VarType(glpk.IV))
+			lp.SetObjCoef(i+1, 1)
+		}
+
+		contains := func(array []int, value int) bool {
+			for i := 0; i < len(array); i++ {
+				if array[i] == value {
+					return true
+				}
+			}
+			return false
+		}
+
+		iArray, jArray := []int32{0}, []int32{0}
+		array := []float64{0.0}
+		for i := 0; i < len(machine.joltageRequirements); i++ {
+			for j := 0; j < len(machine.wiringSchematics); j++ {
+				iArray = append(iArray, int32(i+1))
+				jArray = append(jArray, int32(j+1))
+				if contains(machine.wiringSchematics[j], i) {
+					array = append(array, 1.0)
+				} else {
+					array = append(array, 0.0)
+				}
+			}
+		}
+		lp.LoadMatrix(iArray, jArray, array)
+		iocp := glpk.NewIocp()
+		iocp.SetMsgLev(glpk.MsgLev(glpk.MSG_OFF))
+		iocp.SetPresolve(true)
+		if err := lp.Intopt(iocp); err != nil {
+			return 0, nil
+		}
+		for i := 0; i < len(machine.wiringSchematics); i++ {
+			totalPresses += int(lp.MipColVal(i + 1))
+		}
+		lp.Delete()
+	}
+	return totalPresses, nil
 }
 
 func parseFile(filename string) ([]Machine, error) {

@@ -53,6 +53,7 @@ func main() {
 	solve(Problem[int64]{day: 9, part: 2, solver: day09.Part2})
 
 	solve(Problem[int]{day: 10, part: 1, solver: day10.Part1})
+	solve(Problem[int]{day: 10, part: 2, solver: day10.Part2})
 
 	solve(Problem[int]{day: 11, part: 1, solver: day11.Part1})
 	solve(Problem[int64]{day: 11, part: 2, solver: day11.Part2})
